@@ -1,18 +1,15 @@
+import { useState } from "react";
+import NavigationBar from "../features/NavigationBar.jsx";
+
 export default function Home() {
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
-      <div className="bg-slate-50 h-16 drop-shadow-lg grid grid-cols-[1fr,_auto,_1fr]">
-        {/* Left bar corner */}
-        <div></div>
-        {/* Navigation buttons */}
-        <div className="flex justify-center items-center h-min-fit">
-          <div className="px-6">Home</div>
-          <div className="px-6">Decks</div>
-          <div className="px-6">About</div>
-        </div>
-        {/* Right bar corner */}
-        <div></div>
-      </div>
+      <NavigationBar />
+      {/* Center logo */}
+      <section className="flex flex-col justify-center items-center">
+        <div className="text-8xl font-lexend mt-36 font-light">IKNA</div>
+        <div className="text-2xl font-light">Learning is easy!</div>
+      </section>
     </div>
   );
 }
