@@ -17,7 +17,11 @@ export default function DeckIndex() {
           {userData.decks.map((deck) => (
             <tr
               className="hover:bg-yellow-300"
-              onClick={() => navigate("/decks/" + deck.title)}
+              onClick={() =>
+                navigate(
+                  "/study/" + deck.suid + "/" + deck.title.replace(/\s+/g, "-")
+                )
+              }
             >
               <td className="py-2 px-4">{deck.title}</td>
               <td className="py-2 px-4 text-center">{deck.cards.length}</td>
