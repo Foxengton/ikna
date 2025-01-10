@@ -1,5 +1,5 @@
 import { Children } from "react";
-import NavigationBar from "./NavigationBar.jsx";
+import NavigationBar from "../components/NavigationBar.jsx";
 
 export default function PageWrapper({ children }) {
   return (
