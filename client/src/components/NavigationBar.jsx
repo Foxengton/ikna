@@ -13,9 +13,7 @@ export default function NavigationBar() {
       </div>
       {/* Right bar corner */}
       <div className="flex items-center flex-row-reverse gap-2">
-        <Button className="bg-yellow-300 font-semibold" text="Sign in">
-          Test
-        </Button>
+        <Button className="bg-yellow-300 font-semibold">Sign in</Button>
       </div>
     </header>
   );
