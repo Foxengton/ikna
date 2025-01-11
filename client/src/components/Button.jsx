@@ -1,11 +1,12 @@
 import { Children } from "react";
+import { NavLink } from "react-router";
 
-export default function Button({ className, children }) {
+export default function Button({ className, to = null, children }) {
   return (
-    <div
+    <NavLink
       className={"whitespace-nowrap h-min px-4 py-2 rounded-lg " + className}
     >
       {Children.toArray(children)}
-    </div>
+    </NavLink>
   );
 }
