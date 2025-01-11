@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import Button from "../components/Button.jsx";
 
 export default function NavigationBar() {
@@ -7,9 +8,15 @@ export default function NavigationBar() {
       <div></div>
       {/* Navigation buttons */}
       <div className="flex justify-center items-center h-min-fit">
-        <div className="px-6 font-semibold">Home</div>
-        <div className="px-6 font-semibold">Decks</div>
-        <div className="px-6 font-semibold">About</div>
+        <NavLink className="px-6 font-semibold" to="/">
+          Home
+        </NavLink>
+        <NavLink className="px-6 font-semibold" to="/decks">
+          Decks
+        </NavLink>
+        <NavLink className="px-6 font-semibold" to="/about">
+          About
+        </NavLink>
       </div>
       {/* Right bar corner */}
       <div className="flex items-center flex-row-reverse gap-2">
