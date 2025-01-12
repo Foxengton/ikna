@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router";
 import Button from "../components/Button.jsx";
 import PageWrapper from "../components/PageWrapper.jsx";
 
@@ -58,6 +59,13 @@ export default function LoginPage() {
                 value={password}
               />
             </div>
+            <span className="mb-4 p-1 w-full items-left text-sm">
+              Don't have an account?{" "}
+              <NavLink className="underline" to="/register">
+                Register
+              </NavLink>
+              .
+            </span>
             {/* Submit */}
             <Button
               className={"bg-yellow-300 px-4 py-1 font-medium"}
