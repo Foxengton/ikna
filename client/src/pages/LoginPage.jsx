@@ -1,31 +1,68 @@
+import { useState } from "react";
 import Button from "../components/Button.jsx";
 import PageWrapper from "../components/PageWrapper.jsx";
 
 export default function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState([
+    "Username must have 4 or more characters.",
+  ]);
+
+  // Sumbitting account creation request
+  function login() {
+    let accountData = {
+      username: username,
+      password: password,
+    };
+    setErrors((prev) => [...prev, "Wrong username or password."]);
+    alert(JSON.stringify(accountData));
+  }
+
   return (
     <PageWrapper>
       <div className="absolute h-screen w-screen">
         <div className="flex h-full justify-center items-center">
           <form className="flex flex-col p-4 bg-white rounded justify-center items-center shadow-xl w-72">
-            <h1 className="font-semibold text-2xl mb-2">Sign in</h1>
+            <h1 className="font-semibold text-2xl mb-2">Login</h1>
+            {/* Errors*/}
+            <label className="flex flex-col items-start w-full gap-2 p-1 text-red-600 text-sm">
+              {errors.map((item, index) => (
+                <span key={index}>{item}</span>
+              ))}
+            </label>
             {/* Username */}
             <div className="flex flex-col w-full">
-              <span className="p-1 text-red-600"></span>
+              {/* Username input */}
               <input
-                className="shadow-inner rounded p-2 bg-slate-50"
+                className="shadow-inner rounded p-2 bg-slate-50 mb-2"
                 placeholder="Username"
-              ></input>
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setErrors([]);
+                }}
+                value={username}
+              />
             </div>
-            {/* Username */}
+            {/* Password */}
             <div className="flex flex-col w-full mb-4">
-              <span className="p-1 text-red-600"></span>
+              {/* Password input */}
               <input
+                type="password"
                 className="shadow-inner rounded p-2 bg-slate-50"
                 placeholder="Password"
-              ></input>
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors([]);
+                }}
+                value={password}
+              />
             </div>
             {/* Submit */}
-            <Button className={"bg-yellow-300 px-4 py-1 font-semibold"}>
+            <Button
+              className={"bg-yellow-300 px-4 py-1 font-medium"}
+              onClick={() => login()}
+            >
               Log in
             </Button>
           </form>
