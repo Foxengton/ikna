@@ -41,6 +41,15 @@ export default function RegisterPage() {
     return isValid;
   }
 
+  // Sumbitting account creation request
+  function createAccount() {
+    let accountData = {
+      username: username,
+      password: password,
+    };
+    alert(JSON.stringify(accountData));
+  }
+
   return (
     <PageWrapper>
       <div className="absolute h-screen w-screen">
@@ -89,7 +98,9 @@ export default function RegisterPage() {
             {/* Submit */}
             <Button
               className={"bg-yellow-300 px-4 py-1 font-medium"}
-              onClick={() => checkValidity()}
+              onClick={() => {
+                if (checkValidity()) createAccount();
+              }}
             >
               Create Account
             </Button>
