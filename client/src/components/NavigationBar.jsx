@@ -3,7 +3,7 @@ import Button from "../components/Button.jsx";
 
 export default function NavigationBar() {
   return (
-    <header className="bg-slate-50 h-16 drop-shadow-lg grid grid-cols-[1fr,_auto,_1fr] px-6">
+    <header className="bg-slate-50 h-16 drop-shadow-lg grid grid-cols-[1fr,_auto,_1fr] px-6 z-10">
       {/* Left bar corner */}
       <div></div>
       {/* Navigation buttons */}
