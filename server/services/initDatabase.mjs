@@ -1,7 +1,7 @@
 import fs from "fs";
-import { config } from "../app.mjs";
+import { config, pool } from "../app.mjs";
 
-export default async function initDatabase(pool) {
+export default async function initDatabase() {
   // TESTING: Always create a new DB on launch
   if (config.db.alwaysNewDB) {
     try {
