@@ -6,7 +6,7 @@ CREATE TABLE users (
 	username varchar(20),
   	passwordHash char(48),
     passwordSalt char(32),
-    settings: text
+    settings text
 );
 CREATE TABLE cards (
     id char(32),
