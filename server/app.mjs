@@ -4,11 +4,10 @@ import express from "express";
 import fs from "fs";
 
 const app = express();
-const alwaysNewDB = true; // TESTING
 
 // Fetching configs
 console.clear();
-const config = await JSON.parse(
+export const config = await JSON.parse(
   fs.readFileSync("./config.json", { encoding: "utf8" })
 );
 
@@ -20,7 +19,7 @@ const pool = mysql.createPool({
 });
 
 // TESTING: Always create a new DB on launch
-if (alwaysNewDB) {
+if (config.db.alwaysNewDB) {
   try {
     await pool.query("DROP DATABASE ikna");
   } catch {}
