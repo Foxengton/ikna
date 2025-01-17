@@ -2,9 +2,9 @@ CREATE DATABASE ikna;
 USE ikna;
 
 CREATE TABLE users (
-    id char(32),
+    id char(36),
 	username varchar(20),
-  	passwordHash char(48),
+  	passwordHash char(100),
     passwordSalt char(32),
     settings text
 );
