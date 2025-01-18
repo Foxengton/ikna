@@ -15,30 +15,34 @@ export default async function loginController(req, res) {
     }
   */
   req = req?.body;
-  if (req?.username && req?.password) {
-    const query = "SELECT * FROM users WHERE username = ?";
-    let [result] = await pool.query(query, [req.username]);
-    // User found
-    if (result.length === 1) {
-      result = result[0];
-      const salt = result.passwordSalt;
-      const hash = result.passwordHash;
-      // Password check
-      if (await argon2.verify(hash, req.password.concat(salt))) {
-        // User authorized (via password)
-        res.status(200).send(jwtSign({ username: req.username }));
-      } else res.status(400).send("Wrong username or password");
-    } else res.status(400).send("Wrong username or password");
-  } else {
-    // No username/password -> checking jwt
-    if (req?.token) {
-      if (jwtVerify(req.token)) {
-        const username = req.token?.username;
-        // User authorized (via token)
-        if (username) res.status(200).send(jwtSign({ username: username }));
-      }
-    }
-    // No token found
-    else res.status(400).send("Bad request");
+  const tokenUsername = jwtVerify(req?.token)?.username;
+  const username = req?.username;
+  const password = req?.password;
+  // Checking token
+  if (tokenUsername) {
+    // User authorized (via token)
+    res.status(200).send(jwtSign({ username: tokenUsername }));
+    return;
   }
+  // Checking username/password
+  if (username && password) {
+    const query = "SELECT * FROM users WHERE username = ?";
+    let [result] = await pool.query(query, [username]);
+    // User not found
+    if (result.length === 0) {
+      res.status(400).send("Wrong username or password");
+      return;
+    }
+    const salt = result[0].passwordSalt;
+    const hash = result[0].passwordHash;
+    // Password check
+    const isValid = await argon2.verify(hash, password.concat(salt));
+    if (isValid)
+      // User authorized (via password)
+      res.status(200).send(jwtSign({ username: username }));
+    else res.status(400).send("Wrong username or password");
+    return;
+  }
+  // No username/password, no token
+  res.status(400).send("Bad request");
 }
