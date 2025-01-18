@@ -1,5 +1,4 @@
 import { pool } from "../app.mjs";
-import { v4 as uuidv4 } from "uuid";
 import cryptoRandomString from "crypto-random-string";
 import argon2 from "argon2";
 import jwtSign from "../services/jwtSign.mjs";
@@ -27,14 +26,9 @@ export default async function registrationController(req, res) {
     const salt = cryptoRandomString({ length: 32, type: "base64" });
     const saltedPassword = await argon2.hash(req.password.concat(salt));
     const queryInsert =
-      "INSERT INTO users (id, username, passwordHash, passwordSalt) VALUES (?, ?, ?, ?)";
+      "INSERT INTO users (username, passwordHash, passwordSalt) VALUES (?, ?, ?)";
     // Add new user
-    await pool.query(queryInsert, [
-      uuidv4(),
-      req.username,
-      saltedPassword,
-      salt,
-    ]);
+    await pool.query(queryInsert, [req.username, saltedPassword, salt]);
     res.status(200).send(jwtSign({ username: req.username }));
     return;
   }
