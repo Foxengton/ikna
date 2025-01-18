@@ -2,6 +2,7 @@ import { pool } from "../app.mjs";
 import { v4 as uuidv4 } from "uuid";
 import cryptoRandomString from "crypto-random-string";
 import argon2 from "argon2";
+import jwtSign from "../services/jwtSign.mjs";
 
 export default async function registrationController(req, res) {
   /*
@@ -29,7 +30,8 @@ export default async function registrationController(req, res) {
         saltedPassword,
         salt,
       ]);
-      res.status(200).send("User created");
+      // User created
+      res.status(200).send(jwtSign({ username: req.username }));
     } else res.status(400).send("User already exists");
   } else res.status(400).send("Bad request");
 }
