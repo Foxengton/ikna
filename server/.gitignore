@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Config files
+# Sensative files
 config.json
+secret.key

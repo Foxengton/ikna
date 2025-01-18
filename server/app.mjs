@@ -3,6 +3,7 @@ import express from "express";
 import fs from "fs";
 import initDatabase from "./services/initDatabase.mjs";
 import initControllers from "./services/initControllers.mjs";
+import initSecretKey from "./services/initSecretKey.mjs";
 
 export const app = express();
 
@@ -18,8 +19,10 @@ export const pool = mysql.createPool({
   multipleStatements: true,
 });
 
+export const secretKey = await initSecretKey();
 await initDatabase();
 await initControllers();
+
 app.listen(config.db.port, () => {
   console.log(`Server is running at ${config.db.host}:${config.db.port}`);
 });
