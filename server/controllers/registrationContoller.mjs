@@ -13,25 +13,31 @@ export default async function registrationController(req, res) {
     }
   */
   req = req?.body;
-  if (req?.username && req?.password) {
+  const username = req?.username;
+  const password = req?.password;
+  if (username && password) {
     const query = "SELECT username FROM users WHERE username = ?";
     const [result] = await pool.query(query, [req.username]);
     // No existing user
-    if (result.length === 0) {
-      // Salting and hashing
-      const salt = cryptoRandomString({ length: 32, type: "base64" });
-      const saltedPassword = await argon2.hash(req.password.concat(salt));
-      const query =
-        "INSERT INTO users (id, username, passwordHash, passwordSalt) VALUES (?, ?, ?, ?)";
-      // Add new user
-      const [result] = await pool.query(query, [
-        uuidv4(),
-        req.username,
-        saltedPassword,
-        salt,
-      ]);
-      // User created
-      res.status(200).send(jwtSign({ username: req.username }));
-    } else res.status(400).send("User already exists");
-  } else res.status(400).send("Bad request");
+    if (result.length !== 0) {
+      res.status(400).send("User already exists");
+      return;
+    }
+    // Salting and hashing
+    const salt = cryptoRandomString({ length: 32, type: "base64" });
+    const saltedPassword = await argon2.hash(req.password.concat(salt));
+    const queryInsert =
+      "INSERT INTO users (id, username, passwordHash, passwordSalt) VALUES (?, ?, ?, ?)";
+    // Add new user
+    await pool.query(queryInsert, [
+      uuidv4(),
+      req.username,
+      saltedPassword,
+      salt,
+    ]);
+    res.status(200).send(jwtSign({ username: req.username }));
+    return;
+  }
+  // No username and/or password
+  res.status(400).send("Bad request");
 }
