@@ -1,5 +1,5 @@
 import { pool } from "../app.mjs";
-import argon2, { verify } from "argon2";
+import argon2 from "argon2";
 import jwtSign from "../services/jwtSign.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 
