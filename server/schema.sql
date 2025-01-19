@@ -10,15 +10,15 @@ CREATE TABLE users (
 );
 CREATE TABLE cards (
     id int PRIMARY KEY AUTO_INCREMENT,
-    userId char(32),
-    deckId char(32),
-	front text,
-    back text,
+    userId int,
+    deckId int,
+	cardFront text,
+    cardBack text,
     lastReview timestamp,
     nextInterval int
 );
 CREATE TABLE decks (
     id int PRIMARY KEY AUTO_INCREMENT,
-    userId char(32),
+    userId int,
 	deckName tinytext
 );

@@ -5,7 +5,7 @@ import jwtSign from "../services/jwtSign.mjs";
 
 export default async function registrationController(req, res) {
   /*
-    ======= New account creation =======
+    ======= New account registration =======
     Expected object: {
         username: username,
         passoword: password

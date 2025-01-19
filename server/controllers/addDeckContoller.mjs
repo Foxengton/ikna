@@ -3,7 +3,7 @@ import jwtVerify from "../services/jwtVerify.mjs";
 
 export default async function addDeckContoller(req, res) {
   /*
-    ======= Add card =======
+    ======= Add deck =======
     Expected object: {
         token: token,
         data: {
@@ -28,7 +28,7 @@ export default async function addDeckContoller(req, res) {
   let [result] = await pool.query(query, [tokenUsername]);
   // User not found
   if (result.length === 0) {
-    res.status(400).send("Username doesn't exist");
+    res.status(400).send(`User ${tokenUsername} doesn't exist`);
     return;
   }
   const userId = result[0].id;
