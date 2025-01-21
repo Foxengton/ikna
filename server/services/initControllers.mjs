@@ -9,10 +9,10 @@ import deleteCardContoller from "../controllers/deleteCardContoller.mjs";
 
 export default async function initControllers() {
   app.use(express.json());
-  app.get("/api/register", (req, res) => registrationController(req, res));
-  app.get("/api/login", (req, res) => loginController(req, res));
-  app.get("/api/deck/add", (req, res) => addDeckContoller(req, res));
-  app.get("/api/deck/delete", (req, res) => deleteDeckContoller(req, res));
-  app.get("/api/card/add", (req, res) => addCardContoller(req, res));
-  app.get("/api/card/delete", (req, res) => deleteCardContoller(req, res));
+  app.post("/api/register", (req, res) => registrationController(req, res));
+  app.post("/api/login", (req, res) => loginController(req, res));
+  app.post("/api/deck/add", (req, res) => addDeckContoller(req, res));
+  app.post("/api/deck/delete", (req, res) => deleteDeckContoller(req, res));
+  app.post("/api/card/add", (req, res) => addCardContoller(req, res));
+  app.post("/api/card/delete", (req, res) => deleteCardContoller(req, res));
 }
