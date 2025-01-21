@@ -1,18 +1,16 @@
 import { config } from "../app.mjs";
 import fs from "fs";
-import cryptoRandomString from "crypto-random-string";
+import crypto from "node:crypto";
 
 export default async function initSecretKey() {
   try {
     // Secret key exists
-    return await fs.readFileSync("./secret.key", { encoding: "utf8" });
+    const buffer = fs.readFileSync("./secret.key", { encoding: "utf-8" });
+    return Buffer.from(buffer, "base64");
   } catch {
     // Creating a new secret key
-    const secretKey = cryptoRandomString({
-      length: config.secretKeyLength,
-      type: "base64",
-    });
-    await fs.writeFileSync("./secret.key", secretKey, { encoding: "utf8" });
+    const secretKey = crypto.randomBytes(config.secretKeySize);
+    await fs.writeFileSync("./secret.key", secretKey.toString("base64"));
     return secretKey;
   }
 }

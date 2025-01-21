@@ -8,6 +8,6 @@
     "schemaLocation": "./schema.sql",
     "alwaysNewDB": false
   },
-  "secretKeyLength": 128,
+  "secretKeySize": 128,
   "jwtExpirationTime": "1d"
 }
