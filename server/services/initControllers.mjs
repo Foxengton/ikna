@@ -5,6 +5,7 @@ import loginController from "../controllers/loginContoller.mjs";
 import addDeckContoller from "../controllers/addDeckContoller.mjs";
 import deleteDeckContoller from "../controllers/deleteDeckContoller.mjs";
 import addCardContoller from "../controllers/addCardContoller.mjs";
+import deleteCardContoller from "../controllers/deleteCardContoller.mjs";
 
 export default async function initControllers() {
   app.use(express.json());
@@ -13,4 +14,5 @@ export default async function initControllers() {
   app.get("/api/deck/add", (req, res) => addDeckContoller(req, res));
   app.get("/api/deck/delete", (req, res) => deleteDeckContoller(req, res));
   app.get("/api/card/add", (req, res) => addCardContoller(req, res));
+  app.get("/api/card/delete", (req, res) => deleteCardContoller(req, res));
 }
