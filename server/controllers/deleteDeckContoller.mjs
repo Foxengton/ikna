@@ -20,7 +20,7 @@ export default async function deleteDeckContoller(req, res) {
     return;
   }
   // Checking deck name
-  if (!deckName) {
+  if (deckName === undefined) {
     res.status(404).send("Deck name missing");
     return;
   }
