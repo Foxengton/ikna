@@ -8,7 +8,7 @@ export default async function registrationController(req, res) {
     ======= New account registration =======
     Expected object: {
         username: username,
-        passoword: password
+        password: password
     }
   */
   req = req?.body;
