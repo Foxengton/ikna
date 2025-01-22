@@ -32,13 +32,6 @@ export default async function addDeckContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM decks WHERE user_id = ? AND deck_name = ?";
-  [result] = await pool.query(query, [userId, deckName]);
-  // Checking decks with the same name
-  if (result.length !== 0) {
-    res.status(400).send(`Deck named ${deckName} already exists`);
-    return;
-  }
   // Adding deck
   query = "INSERT INTO decks (user_id, deck_name) VALUES (?, ?)";
   await pool.query(query, [userId, deckName]);
