@@ -36,7 +36,7 @@ export default async function deleteCardContoller(req, res) {
   [result] = await pool.query(query, [userId, cardId]);
   // Checking cards with the same ID
   if (result.length === 0) {
-    res.status(400).send(`Card with ID ${cardId} wasn't found`);
+    res.status(400).send(`Card with ID ${cardId} doesn't exist`);
     return;
   }
   const deckId = result[0].id;

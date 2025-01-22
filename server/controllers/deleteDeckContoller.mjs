@@ -19,7 +19,7 @@ export default async function deleteDeckContoller(req, res) {
     res.status(401).send("Access unauthorized");
     return;
   }
-  // Checking deck name
+  // Checking deck ID
   if (deckId === undefined) {
     res.status(404).send("Deck ID missing");
     return;
@@ -34,7 +34,7 @@ export default async function deleteDeckContoller(req, res) {
   const userId = result[0].id;
   query = "SELECT * FROM decks WHERE userId = ? AND id = ?";
   [result] = await pool.query(query, [userId, deckId]);
-  // Checking if deck was deleted
+  // Checking decks with the same ID
   if (result.length === 0) {
     res.status(400).send(`Deck with ID ${deckId} doesn't exist`);
     return;
