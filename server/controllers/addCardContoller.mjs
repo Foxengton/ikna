@@ -7,7 +7,7 @@ export default async function addCardContoller(req, res) {
     Expected object: {
         token: token,
         data: {
-          deckName: deckName
+          deckId: deckName
           cardFront: front
           cardBack: back
         }
@@ -15,7 +15,7 @@ export default async function addCardContoller(req, res) {
   */
   req = req?.body;
   const tokenUsername = jwtVerify(req?.token)?.username;
-  const deckName = req?.data?.deckName;
+  const deckId = req?.data?.deckId;
   const cardFront = req?.data?.cardFront;
   const cardBack = req?.data?.cardBack;
   // Checking token
@@ -24,8 +24,8 @@ export default async function addCardContoller(req, res) {
     return;
   }
   // Checking deck name
-  if (deckName === undefined) {
-    res.status(404).send("Deck name missing");
+  if (deckId === undefined) {
+    res.status(404).send("Deck ID missing");
     return;
   }
   let query = "SELECT id FROM users WHERE username = ?";
@@ -36,14 +36,13 @@ export default async function addCardContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM decks WHERE userId = ? AND deckName = ?";
-  [result] = await pool.query(query, [userId, deckName]);
-  // Checking decks with the same name
+  query = "SELECT * FROM decks WHERE userId = ? AND id = ?";
+  [result] = await pool.query(query, [userId, deckId]);
+  // Checking decks with the same ID
   if (result.length === 0) {
-    res.status(400).send(`Deck named ${deckName} doesn't exist`);
+    res.status(400).send(`Deck ID ${deckId} doesn't exist`);
     return;
   }
-  const deckId = result[0].id;
   // Adding card
   query =
     "INSERT INTO cards (userId, deckId, cardFront, cardBack, lastReview, nextInterval) VALUES (?, ?, ?, ?, ?, ?)";
