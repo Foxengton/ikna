@@ -42,4 +42,8 @@ export default async function deleteDeckContoller(req, res) {
   // Deck deletion
   query = "DELETE FROM decks WHERE id = ?";
   await pool.query(query, [deckId]);
+  // Related card deletion
+  query = "DELETE FROM cards WHERE deckId = ?";
+  await pool.query(query, [deckId]);
+  res.status(200).send("Deck deleted");
 }
