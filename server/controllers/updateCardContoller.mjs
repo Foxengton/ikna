@@ -36,7 +36,7 @@ export default async function updateCardContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM cards WHERE userId = ? AND id = ?";
+  query = "SELECT * FROM cards WHERE user_id = ? AND id = ?";
   [result] = await pool.query(query, [userId, cardId]);
   // Checking cards with the same ID
   if (result.length === 0) {
@@ -44,10 +44,10 @@ export default async function updateCardContoller(req, res) {
     return;
   }
   const deckId = result[0].id;
-  cardFront = cardFront ?? result[0].cardFront;
-  cardBack = cardBack ?? result[0].cardBack;
+  cardFront = cardFront ?? result[0].card_front;
+  cardBack = cardBack ?? result[0].card_back;
   // Updating card
-  query = "UPDATE cards SET cardFront = ?, cardBack = ? WHERE id = ?";
+  query = "UPDATE cards SET card_front = ?, card_back = ? WHERE id = ?";
   await pool.query(query, [cardFront, cardBack, cardId]);
   res.status(200).send("Card updated");
 }

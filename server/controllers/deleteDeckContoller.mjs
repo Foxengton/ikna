@@ -32,7 +32,7 @@ export default async function deleteDeckContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM decks WHERE userId = ? AND id = ?";
+  query = "SELECT * FROM decks WHERE user_id = ? AND id = ?";
   [result] = await pool.query(query, [userId, deckId]);
   // Checking decks with the same ID
   if (result.length === 0) {
@@ -43,7 +43,7 @@ export default async function deleteDeckContoller(req, res) {
   query = "DELETE FROM decks WHERE id = ?";
   await pool.query(query, [deckId]);
   // Related card deletion
-  query = "DELETE FROM cards WHERE deckId = ?";
+  query = "DELETE FROM cards WHERE deck_id = ?";
   await pool.query(query, [deckId]);
   res.status(200).send("Deck deleted");
 }

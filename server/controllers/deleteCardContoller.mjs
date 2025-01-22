@@ -32,7 +32,7 @@ export default async function deleteCardContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM cards WHERE userId = ? AND id = ?";
+  query = "SELECT * FROM cards WHERE user_id = ? AND id = ?";
   [result] = await pool.query(query, [userId, cardId]);
   // Checking cards with the same ID
   if (result.length === 0) {

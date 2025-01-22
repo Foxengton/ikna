@@ -34,16 +34,16 @@ export default async function updateDeckContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM decks WHERE userId = ? AND id = ?";
+  query = "SELECT * FROM decks WHERE user_id = ? AND id = ?";
   [result] = await pool.query(query, [userId, deckId]);
   // Checking decks with the same ID
   if (result.length === 0) {
     res.status(400).send(`Deck with ID ${deckId} doesn't exist`);
     return;
   }
-  deckName = deckName ?? result[0].deckName;
+  deckName = deckName ?? result[0].deck_name;
   // Updating deck
-  query = "UPDATE decks SET deckName = ? WHERE id = ?";
+  query = "UPDATE decks SET deck_name = ? WHERE id = ?";
   await pool.query(query, [deckName, deckId]);
   res.status(200).send("Deck updated");
 }

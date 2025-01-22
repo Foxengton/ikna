@@ -26,7 +26,7 @@ export default async function registrationController(req, res) {
     const salt = cryptoRandomString({ length: 32, type: "base64" });
     const saltedPassword = await argon2.hash(req.password.concat(salt));
     const queryInsert =
-      "INSERT INTO users (username, passwordHash, passwordSalt) VALUES (?, ?, ?)";
+      "INSERT INTO users (username, password_hash, password_salt) VALUES (?, ?, ?)";
     // Add new user
     await pool.query(queryInsert, [req.username, saltedPassword, salt]);
     res.status(200).send(jwtSign({ username: req.username }));

@@ -32,7 +32,7 @@ export default async function listCardsContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT id FROM decks WHERE id = ? AND userId = ?";
+  query = "SELECT id FROM decks WHERE id = ? AND user_id = ?";
   [result] = await pool.query(query, [deckId, userId]);
   // Deck doesn't belong to user
   if (result.length === 0) {
@@ -41,10 +41,10 @@ export default async function listCardsContoller(req, res) {
   }
   // Listing cards
   query = `SELECT JSON_ARRAYAGG(
-    JSON_OBJECT('id', id, 'cardFront', cardFront, 'cardBack', cardBack))
+    JSON_OBJECT('id', id, 'cardFront', card_front, 'cardBack', card_back))
     AS data
     FROM cards
-      WHERE deckId = ? AND userId = ?`;
+      WHERE deck_id = ? AND user_id = ?`;
   [result] = await pool.query(query, [deckId, userId]);
   res.status(200).send(result);
 }

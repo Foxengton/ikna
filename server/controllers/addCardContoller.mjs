@@ -36,7 +36,7 @@ export default async function addCardContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM decks WHERE userId = ? AND id = ?";
+  query = "SELECT * FROM decks WHERE user_id = ? AND id = ?";
   [result] = await pool.query(query, [userId, deckId]);
   // Checking decks with the same ID
   if (result.length === 0) {
@@ -45,7 +45,7 @@ export default async function addCardContoller(req, res) {
   }
   // Adding card
   query =
-    "INSERT INTO cards (userId, deckId, cardFront, cardBack, lastReview, nextInterval) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO cards (user_id, deck_id, card_front, card_back, last_review, next_interval) VALUES (?, ?, ?, ?, ?, ?)";
   await pool.query(query, [
     userId,
     deckId,

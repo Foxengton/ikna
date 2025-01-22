@@ -32,7 +32,7 @@ export default async function addDeckContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM decks WHERE userId = ? AND deckName = ?";
+  query = "SELECT * FROM decks WHERE user_id = ? AND deck_name = ?";
   [result] = await pool.query(query, [userId, deckName]);
   // Checking decks with the same name
   if (result.length !== 0) {
@@ -40,7 +40,7 @@ export default async function addDeckContoller(req, res) {
     return;
   }
   // Adding deck
-  query = "INSERT INTO decks (userId, deckName) VALUES (?, ?)";
+  query = "INSERT INTO decks (user_id, deck_name) VALUES (?, ?)";
   await pool.query(query, [userId, deckName]);
   res.status(200).send("Deck created");
 }

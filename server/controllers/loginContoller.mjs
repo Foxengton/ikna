@@ -33,8 +33,8 @@ export default async function loginController(req, res) {
       res.status(400).send("Wrong username or password");
       return;
     }
-    const salt = result[0].passwordSalt;
-    const hash = result[0].passwordHash;
+    const salt = result[0].password_salt;
+    const hash = result[0].password_hash;
     // Password check
     const isValid = await argon2.verify(hash, password.concat(salt));
     if (isValid)
