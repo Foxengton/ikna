@@ -25,7 +25,7 @@ export default async function listDecksContoller(req, res) {
   const userId = result[0].id;
   // Listing decks
   query = `SELECT JSON_ARRAYAGG(
-    JSON_OBJECT('id', id, 'deckName', deck_name))
+    JSON_OBJECT('id', id, 'deckName', deck_name, 'cardCount', card_count))
     AS data
     FROM decks
     WHERE user_id = ?;`;

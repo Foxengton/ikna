@@ -20,5 +20,6 @@ CREATE TABLE cards (
 CREATE TABLE decks (
     id int PRIMARY KEY AUTO_INCREMENT,
     user_id int,
-	deck_name tinytext
+	deck_name tinytext,
+    card_count int
 );

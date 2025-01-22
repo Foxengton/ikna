@@ -39,9 +39,12 @@ export default async function deleteCardContoller(req, res) {
     res.status(400).send(`Card with ID ${cardId} doesn't exist`);
     return;
   }
-  const deckId = result[0].id;
+  const deckId = result[0].deck_id;
   // Deleting card
   query = "DELETE FROM cards WHERE id = ?";
   await pool.query(query, [cardId]);
+  // Updating card count
+  query = "UPDATE decks SET card_count = card_count - 1 WHERE id = ?";
+  await pool.query(query, [deckId]);
   res.status(200).send("Card deleted");
 }

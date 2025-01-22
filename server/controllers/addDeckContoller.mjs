@@ -33,7 +33,7 @@ export default async function addDeckContoller(req, res) {
   }
   const userId = result[0].id;
   // Adding deck
-  query = "INSERT INTO decks (user_id, deck_name) VALUES (?, ?)";
-  await pool.query(query, [userId, deckName]);
+  query = "INSERT INTO decks (user_id, deck_name, card_count) VALUES (?, ?, ?)";
+  await pool.query(query, [userId, deckName, 0]);
   res.status(200).send("Deck created");
 }

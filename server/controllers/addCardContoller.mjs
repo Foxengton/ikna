@@ -54,5 +54,8 @@ export default async function addCardContoller(req, res) {
     "1970-01-01 00:00:01",
     24 * 60 * 60 * 1000, // Initial interval = one day
   ]);
+  // Updating card count
+  query = "UPDATE decks SET card_count = card_count + 1 WHERE id = ?";
+  await pool.query(query, [deckId]);
   res.status(200).send("Card created");
 }
