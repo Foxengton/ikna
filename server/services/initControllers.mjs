@@ -8,6 +8,7 @@ import addCardContoller from "../controllers/addCardContoller.mjs";
 import deleteCardContoller from "../controllers/deleteCardContoller.mjs";
 import listDecksContoller from "../controllers/listDecksContoller.mjs";
 import listCardsContoller from "../controllers/listCardsContoller.mjs";
+import updateCardContoller from "../controllers/updateCardContoller.mjs";
 
 export default async function initControllers() {
   app.use(express.json());
@@ -17,6 +18,7 @@ export default async function initControllers() {
   app.post("/api/deck/add", (req, res) => addDeckContoller(req, res));
   app.post("/api/deck/delete", (req, res) => deleteDeckContoller(req, res));
   app.post("/api/card/add", (req, res) => addCardContoller(req, res));
+  app.post("/api/card/update", (req, res) => updateCardContoller(req, res));
   app.post("/api/card/delete", (req, res) => deleteCardContoller(req, res));
   app.post("/api/card/list", (req, res) => listCardsContoller(req, res));
 }
