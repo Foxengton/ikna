@@ -7,21 +7,21 @@ export default async function deleteDeckContoller(req, res) {
     Expected object: {
         token: token,
         data: {
-          deckName: deckName
+          deckId: deckId
         }
     }
   */
   req = req?.body;
   const tokenUsername = jwtVerify(req?.token)?.username;
-  const deckName = req?.data?.deckName;
+  const deckId = req?.data?.deckId;
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");
     return;
   }
   // Checking deck name
-  if (deckName === undefined) {
-    res.status(404).send("Deck name missing");
+  if (deckId === undefined) {
+    res.status(404).send("Deck ID missing");
     return;
   }
   let query = "SELECT id FROM users WHERE username = ?";
@@ -32,15 +32,14 @@ export default async function deleteDeckContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT * FROM decks WHERE userId = ? AND deckName = ?";
-  [result] = await pool.query(query, [userId, deckName]);
+  query = "SELECT * FROM decks WHERE userId = ? AND id = ?";
+  [result] = await pool.query(query, [userId, deckId]);
   // Checking if deck was deleted
   if (result.length === 0) {
-    res.status(400).send(`Deck named ${deckName} doesn't exist`);
+    res.status(400).send(`Deck with ID ${deckId} doesn't exist`);
     return;
   }
-  // Deck delection
-  query = "DELETE FROM decks WHERE userId = ? AND deckName = ?";
-  await pool.query(query, [userId, deckName]);
-  res.status(200).send("Deck deleted");
+  // Deck deletion
+  query = "DELETE FROM decks WHERE id = ?";
+  await pool.query(query, [deckId]);
 }
