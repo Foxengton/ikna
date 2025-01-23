@@ -5,7 +5,7 @@ CREATE TABLE users (
     id int PRIMARY KEY AUTO_INCREMENT,
 	username varchar(20),
   	password_hash char(100),
-    password_salt char(32),
+    password_salt char(44),
     settings text
 );
 CREATE TABLE cards (

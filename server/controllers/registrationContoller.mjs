@@ -1,5 +1,5 @@
 import { pool } from "../app.mjs";
-import cryptoRandomString from "crypto-random-string";
+import crypto from "node:crypto";
 import argon2 from "argon2";
 import jwtSign from "../services/jwtSign.mjs";
 
@@ -23,7 +23,7 @@ export default async function registrationController(req, res) {
       return;
     }
     // Salting and hashing
-    const salt = cryptoRandomString({ length: 32, type: "base64" });
+    const salt = crypto.randomBytes(32).toString("base64");
     const saltedPassword = await argon2.hash(req.password.concat(salt));
     const queryInsert =
       "INSERT INTO users (username, password_hash, password_salt) VALUES (?, ?, ?)";
