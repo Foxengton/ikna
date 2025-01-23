@@ -44,5 +44,5 @@ export default async function loginController(req, res) {
     return;
   }
   // No username/password, no token
-  res.status(400).send("Bad request");
+  res.status(401).send("Access denied");
 }
