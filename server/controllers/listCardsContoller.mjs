@@ -43,11 +43,20 @@ export default async function listCardsContoller(req, res) {
   }
   const totalCardCount = result[0].card_count;
   // Listing cards
-  query = `SELECT JSON_ARRAYAGG(
-    JSON_OBJECT('id', id, 'cardFront', card_front, 'cardBack', card_back))
-    AS data
-    FROM cards
-      WHERE deck_id = ? AND user_id = ?`;
-  [result] = await pool.query(query, [deckId, userId]);
-  res.status(200).send(result);
+  query = `
+    SELECT JSON_OBJECT(
+      'data', (
+        SELECT JSON_ARRAYAGG(
+          JSON_OBJECT('id', id, 'cardFront', card_front,    'cardBack', card_back)
+        )
+        AS data
+        FROM cards
+        WHERE deck_id = ? AND user_id = ?
+      ),
+      'totalCardCount', ?
+    ) AS result
+    `;
+  [result] = await pool.query(query, [deckId, userId, totalCardCount]);
+  console.log(result[0].result);
+  res.status(200).send(result[0].result);
 }
