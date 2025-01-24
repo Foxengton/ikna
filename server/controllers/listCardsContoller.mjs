@@ -34,13 +34,14 @@ export default async function listCardsContoller(req, res) {
     return;
   }
   const userId = result[0].id;
-  query = "SELECT id FROM decks WHERE id = ? AND user_id = ?";
+  query = "SELECT * FROM decks WHERE id = ? AND user_id = ?";
   [result] = await pool.query(query, [deckId, userId]);
   // Deck doesn't belong to user
   if (result.length === 0) {
     res.status(400).send(`Access denied`);
     return;
   }
+  const totalCardCount = result[0].card_count;
   // Listing cards
   query = `
     SELECT JSON_OBJECT(
@@ -51,10 +52,11 @@ export default async function listCardsContoller(req, res) {
         AS data
         FROM cards
         WHERE deck_id = ? AND user_id = ?
-      )
+      ),
+      'totalCardCount', ?
     ) AS result
     `;
-  [result] = await pool.query(query, [deckId, userId]);
+  [result] = await pool.query(query, [deckId, userId, totalCardCount]);
   console.log(result[0].result);
   res.status(200).send(result[0].result);
 }
