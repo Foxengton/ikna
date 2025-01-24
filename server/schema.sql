@@ -14,11 +14,12 @@ CREATE TABLE cards (
     deck_id int,
 	card_front text,
     card_back text,
-    last_review timestamp,
+    last_review int,
     next_interval int
 );
 CREATE TABLE decks (
     id int PRIMARY KEY AUTO_INCREMENT,
+    guid char(8),
     user_id int,
 	deck_name tinytext,
     card_count int

@@ -1,5 +1,6 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
+import newGuid from "../services/newGuid.mjs";
 
 export default async function addDeckContoller(req, res) {
   /*
@@ -33,7 +34,8 @@ export default async function addDeckContoller(req, res) {
   }
   const userId = result[0].id;
   // Adding deck
-  query = "INSERT INTO decks (user_id, deck_name, card_count) VALUES (?, ?, ?)";
-  await pool.query(query, [userId, deckName, 0]);
+  query =
+    "INSERT INTO decks (guid, user_id, deck_name, card_count) VALUES (?, ?, ?, ?)";
+  await pool.query(query, [await newGuid(), userId, deckName, 0]);
   res.status(200).send("Deck created");
 }
