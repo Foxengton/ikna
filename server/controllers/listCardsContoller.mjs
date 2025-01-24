@@ -7,13 +7,15 @@ export default async function listCardsContoller(req, res) {
     Expected object: {
       token: token
       data: {
-        deckId: deckId
+        deckId: deckId,
+        isDue: true/false
       }
     }
   */
   req = req?.body;
   const tokenUsername = jwtVerify(req?.token)?.username;
   const deckId = req?.data?.deckId;
+  const isDue = req?.data?.isDue;
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");
@@ -39,12 +41,22 @@ export default async function listCardsContoller(req, res) {
     res.status(400).send(`Access denied`);
     return;
   }
+  const totalCardCount = result[0].card_count;
   // Listing cards
-  query = `SELECT JSON_ARRAYAGG(
-    JSON_OBJECT('id', id, 'cardFront', card_front, 'cardBack', card_back))
-    AS data
-    FROM cards
-      WHERE deck_id = ? AND user_id = ?`;
-  [result] = await pool.query(query, [deckId, userId]);
-  res.status(200).send(result);
+  query = `
+    SELECT JSON_OBJECT(
+      'data', (
+        SELECT JSON_ARRAYAGG(
+          JSON_OBJECT('id', id, 'cardFront', card_front,    'cardBack', card_back)
+        )
+        AS data
+        FROM cards
+        WHERE deck_id = ? AND user_id = ?
+      ),
+      'totalCardCount', ?
+    ) AS result
+    `;
+  [result] = await pool.query(query, [deckId, userId, cardCount]);
+  console.log(result[0].result);
+  res.status(200).send(result[0].result);
 }
