@@ -16,7 +16,8 @@ CREATE TABLE cards (
     card_back text,
     last_review int,
     next_review int,
-    next_interval int
+    cur_interval int,
+    status varchar(16)
 );
 CREATE TABLE decks (
     id int PRIMARY KEY AUTO_INCREMENT,

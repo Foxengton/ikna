@@ -6,12 +6,12 @@ export default async function addCardContoller(req, res) {
   /*
     ======= Add card =======
     Expected object: {
-        token: token,
-        data: {
-          deckId: deckName
-          cardFront: front
-          cardBack: back
-        }
+      token: token,
+      data: {
+        deckId: deckName
+        cardFront: front
+        cardBack: back
+      }
     }
   */
   req = req?.body;
@@ -47,7 +47,7 @@ export default async function addCardContoller(req, res) {
   // Adding card
   query = `
     INSERT INTO cards (
-      user_id, deck_id, card_front, card_back, last_review, next_review, next_interval
+      user_id, deck_id, card_front, card_back, last_review, next_review, cur_interval
     )
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
@@ -58,7 +58,7 @@ export default async function addCardContoller(req, res) {
     cardBack,
     0,
     0,
-    moment.duration(1, "d").seconds(), // 1-day inteval by default
+    moment.duration(1, "d").asSeconds(), // 1-day interval by default
   ]);
   // Updating card count
   query = "UPDATE decks SET card_count = card_count + 1 WHERE id = ?";
