@@ -47,9 +47,9 @@ export default async function addCardContoller(req, res) {
   // Adding card
   query = `
     INSERT INTO cards (
-      user_id, deck_id, card_front, card_back, last_review, next_review, cur_interval
+      user_id, deck_id, card_front, card_back, last_review, next_review, cur_interval, is_graduated
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
   await pool.query(query, [
     userId,
@@ -59,6 +59,7 @@ export default async function addCardContoller(req, res) {
     0,
     0,
     moment.duration(1, "d").asSeconds(), // 1-day interval by default
+    false,
   ]);
   // Updating card count
   query = "UPDATE decks SET card_count = card_count + 1 WHERE id = ?";

@@ -17,7 +17,7 @@ CREATE TABLE cards (
     last_review int,
     next_review int,
     cur_interval int,
-    status varchar(16)
+    is_graduated boolean
 );
 CREATE TABLE decks (
     id int PRIMARY KEY AUTO_INCREMENT,
