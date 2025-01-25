@@ -15,6 +15,7 @@ CREATE TABLE cards (
 	card_front text,
     card_back text,
     last_review int,
+    next_review int,
     next_interval int
 );
 CREATE TABLE decks (

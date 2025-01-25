@@ -1,5 +1,6 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
+import moment from "moment";
 
 export default async function addCardContoller(req, res) {
   /*
@@ -44,15 +45,20 @@ export default async function addCardContoller(req, res) {
     return;
   }
   // Adding card
-  query =
-    "INSERT INTO cards (user_id, deck_id, card_front, card_back, last_review, next_interval) VALUES (?, ?, ?, ?, ?, ?)";
+  query = `
+    INSERT INTO cards (
+      user_id, deck_id, card_front, card_back, last_review, next_review, next_interval
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
   await pool.query(query, [
     userId,
     deckId,
     cardFront,
     cardBack,
-    "1970-01-01 00:00:01",
-    24 * 60 * 60 * 1000, // Initial interval = one day
+    0,
+    0,
+    moment.duration(1, "d").seconds(), // 1-day inteval by default
   ]);
   // Updating card count
   query = "UPDATE decks SET card_count = card_count + 1 WHERE id = ?";
