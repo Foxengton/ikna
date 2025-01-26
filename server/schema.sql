@@ -17,7 +17,8 @@ CREATE TABLE cards (
     last_review int,
     next_review int,
     cur_interval int,
-    is_graduated boolean
+    status ENUM("LEARNING", "MEMORIZING", "GRADUATED"),
+    learning_step tinyint
 );
 CREATE TABLE decks (
     id int PRIMARY KEY AUTO_INCREMENT,

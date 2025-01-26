@@ -8,6 +8,8 @@ const VERDICTS = [
   { name: "Hard", multiplier: 1.25 },
   { name: "Again", multiplier: 0 },
 ];
+const STATUSES = ["LEARNING", "MEMORIZING", "GRADUATED"];
+const LEARNING_STEPS = [{ m: 1 }, { m: 5 }, { d: 1 }];
 
 export default async function reviewCardContoller(req, res) {
   /*
@@ -27,6 +29,7 @@ export default async function reviewCardContoller(req, res) {
   const verdictObj = VERDICTS.find((item) => item.name === verdict);
   const verdictName = verdictObj?.name;
   const verdictMult = verdictObj?.multiplier;
+  const now = parseInt(moment().format("X"));
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");
@@ -62,43 +65,98 @@ export default async function reviewCardContoller(req, res) {
     res.status(400).send(`Card ID ${cardId} doesn't exist`);
     return;
   }
-  const newInterval = Math.trunc(result[0].cur_interval * verdictMult);
-  let isGraduated = result[0].is_graduated;
-  // Checking if card graduated
-  if (isGraduated) {
+  let newInterval = Math.trunc(result[0].cur_interval * verdictMult);
+  let status = result[0].status;
+  let learningStep = parseInt(result[0].learning_step);
+  /*
+    If card is graduated, there's no need to do
+    anything with it.
+    ==================================================
+  */
+  if (status === "GRADUATED") {
     res.status(400).send(`Card already graduated`);
     return;
   }
-  // Graduating card after a 1-year threshold
-  if (newInterval >= moment.duration(1, "y").asSeconds()) isGraduated = true;
-  // Reviwing card
-  query = `
-    UPDATE cards SET
-    last_review = ?,
-    next_review = ?,
-    cur_interval = ?,
-    is_graduated = ?
-    WHERE id = ?
-  `;
-  const now = parseInt(moment().format("X"));
-  if (newInterval != 0)
-    // Non-zero multiplier
+  if (verdictName === "Again") {
+    // Reset
+    query = `
+      UPDATE cards SET
+      last_review = ?,
+      next_review = ?,
+      cur_interval = ?,
+      status = ?,
+      learning_step = ?
+      WHERE id = ?
+    `;
+    await pool.query(query, [now, now, 0, "LEARNING", 0, cardId]);
+    res.status(200).send("Card reviewed");
+    return;
+  }
+  /*
+    If card is in learning stage, it follows
+    pre-defined intervals according to user's settings.
+    Leaning verdicts are limited to GOOD and AGAIN only.
+    ==================================================
+  */
+  if (status === "LEARNING") {
+    // Invalid verdict for learning stage
+    if (verdictName !== "Again" && verdictName !== "Good") {
+      res.status(402).send("Invalid verdict");
+      return;
+    }
+    // Reset steps after AGAIN verdict or in case of errors
+    if (learningStep >= LEARNING_STEPS.length) learningStep = 0;
+    // End learning stage
+    if (learningStep === LEARNING_STEPS.length - 1) status = "MEMORIZING";
+    newInterval = moment.duration(LEARNING_STEPS[learningStep]).asSeconds();
+    // Reviwing card
+    query = `
+      UPDATE cards SET
+      last_review = ?,
+      next_review = ?,
+      cur_interval = ?,
+      status = ?,
+      learning_step = ?
+      WHERE id = ?
+    `;
     await pool.query(query, [
       now,
       now + newInterval,
       newInterval,
-      isGraduated,
+      status,
+      learningStep + 1,
       cardId,
     ]);
-  // Again verdict
-  else
+    res.status(200).send("Card reviewed");
+    return;
+  }
+  /*
+    If card is in memorizing stage, it follows
+    intervals according to verdict multipliers.
+    ==================================================
+  */
+  if (status === "MEMORIZING") {
+    // Graduating card after a 1-year threshold
+    if (newInterval >= moment.duration(1, "y").asSeconds())
+      status = "GRADUATED";
+    // Reviwing card
+    query = `
+    UPDATE cards SET
+      last_review = ?,
+      next_review = ?,
+      cur_interval = ?,
+      status = ?,
+      learning_step = ?
+      WHERE id = ?
+    `;
     await pool.query(query, [
       now,
-      now,
-      moment.duration(1, "d").asSeconds(),
-      false,
+      now + newInterval,
+      newInterval,
+      status,
+      learningStep,
       cardId,
-    ]); // Reset
-  res.status(200).send("Card reviewed");
-  console.log(moment.duration(newInterval, "s").humanize());
+    ]);
+    res.status(200).send("Card reviewed");
+  }
 }
