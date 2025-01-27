@@ -47,7 +47,7 @@ export default async function addCardContoller(req, res) {
   // Adding card
   query = `
     INSERT INTO cards (
-      user_id, deck_id, card_front, card_back, last_review, next_review, cur_interval, status
+      user_id, deck_id, card_front, card_back, last_review, next_review, cur_interval, learning_step, status
     )
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
@@ -56,6 +56,7 @@ export default async function addCardContoller(req, res) {
     deckId,
     cardFront,
     cardBack,
+    0,
     0,
     0,
     0,
