@@ -5,11 +5,11 @@ export default async function updateDeckContoller(req, res) {
   /*
     ======= Update deck =======
     Expected object: {
-        token: token,
-        data: {
-          deckId: deckId
-          deckName: deckName (optional)
-        }
+      token: token,
+      data: {
+        deckId: deckId
+        deckName: deckName (optional)
+      }
     }
   */
   req = req?.body;

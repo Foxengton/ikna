@@ -6,10 +6,10 @@ export default async function addDeckContoller(req, res) {
   /*
     ======= Add deck =======
     Expected object: {
-        token: token,
-        data: {
-          deckName: deckName
-        }
+      token: token,
+      data: {
+        deckName: deckName
+      }
     }
   */
   req = req?.body;

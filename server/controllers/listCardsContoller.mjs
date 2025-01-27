@@ -3,7 +3,7 @@ import jwtVerify from "../services/jwtVerify.mjs";
 
 export default async function listCardsContoller(req, res) {
   /*
-    ======= List user's decks =======
+    ======= List cards in deck =======
     Expected object: {
       token: token
       data: {

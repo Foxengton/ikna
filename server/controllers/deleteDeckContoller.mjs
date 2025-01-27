@@ -5,10 +5,10 @@ export default async function deleteDeckContoller(req, res) {
   /*
     ======= Delete deck =======
     Expected object: {
-        token: token,
-        data: {
-          deckId: deckId
-        }
+      token: token,
+      data: {
+        deckId: deckId
+      }
     }
   */
   req = req?.body;

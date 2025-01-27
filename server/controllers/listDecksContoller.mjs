@@ -3,9 +3,9 @@ import jwtVerify from "../services/jwtVerify.mjs";
 
 export default async function listDecksContoller(req, res) {
   /*
-    ======= List user's decks =======
+    ======= List decks =======
     Expected object: {
-        token: token
+      token: token
     }
   */
   req = req?.body;

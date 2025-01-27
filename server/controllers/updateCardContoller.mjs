@@ -5,12 +5,12 @@ export default async function updateCardContoller(req, res) {
   /*
     ======= Update card =======
     Expected object: {
-        token: token,
-        data: {
-          cardId: cardId
-          cardFront: cardFront (optional)
-          cardBack: cardBack (optional)
-        }
+      token: token,
+      data: {
+        cardId: cardId
+        cardFront: cardFront (optional)
+        cardBack: cardBack (optional)
+      }
     }
   */
   req = req?.body;

@@ -5,10 +5,10 @@ export default async function deleteCardContoller(req, res) {
   /*
     ======= Delete card =======
     Expected object: {
-        token: token,
-        data: {
-          cardId: cardId
-        }
+      token: token,
+      data: {
+        cardId: cardId
+      }
     }
   */
   req = req?.body;

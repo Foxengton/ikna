@@ -7,8 +7,8 @@ export default async function loginController(req, res) {
   /*
     ======= User login =======
     Expected object: {
-        username: username,
-        password: password
+      username: username,
+      password: password
     }
     or {
       token: token
