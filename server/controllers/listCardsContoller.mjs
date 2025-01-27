@@ -1,5 +1,6 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
+import moment from "moment";
 
 export default async function listCardsContoller(req, res) {
   /*
@@ -41,20 +42,40 @@ export default async function listCardsContoller(req, res) {
     res.status(400).send(`Access denied`);
     return;
   }
-  const totalCardCount = result[0].card_count;
-  // Listing cards
-  query = `
-    SELECT JSON_ARRAYAGG(
-      JSON_OBJECT(
-        'id', id, 'cardFront', card_front, 'cardBack', card_back
-      )
-    ) AS data
-    FROM cards
-    WHERE deck_id = ? AND user_id = ?
-  `;
-  [result] = await pool.query(query, [deckId, userId, totalCardCount]);
+  // Listing cards (only due)s
+  if (isDue == true) {
+    const now = parseInt(moment().format("X"));
+    query = `
+      SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+          'id', id, 'cardFront', card_front, 'cardBack', card_back
+        )
+      ) AS data
+      FROM cards
+      WHERE
+        deck_id = ? AND
+        user_id = ? AND
+        next_review - ? <= 0 AND
+        status != 'GRADUATED'
+    `;
+    [result] = await pool.query(query, [deckId, userId, now]);
+  }
+  // Listing cards (all)
+  else {
+    query = `
+      SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+          'id', id, 'cardFront', card_front, 'cardBack', card_back
+        )
+      ) AS data
+      FROM cards
+      WHERE
+        deck_id = ? AND
+        user_id = ?
+    `;
+    [result] = await pool.query(query, [deckId, userId]);
+  }
   result = result[0];
-  result.totalCardCount = totalCardCount;
   console.log(result);
   res.status(200).send(result);
 }
