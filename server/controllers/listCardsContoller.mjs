@@ -42,9 +42,9 @@ export default async function listCardsContoller(req, res) {
     res.status(400).send(`Access denied`);
     return;
   }
-  // Listing cards (only due)s
+  const now = parseInt(moment().format("X"));
+  // Listing cards (only due)
   if (isDue == true) {
-    const now = parseInt(moment().format("X"));
     query = `
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
@@ -75,7 +75,46 @@ export default async function listCardsContoller(req, res) {
     `;
     [result] = await pool.query(query, [deckId, userId]);
   }
+  const infoQuery = `
+    SELECT JSON_ARRAYAGG(
+      JSON_OBJECT(
+        'id', id, 'deckName', deck_name, "cardCount", card_count,
+        'cardCountDue', (
+          SELECT COUNT(*)
+          FROM cards
+          WHERE
+            deck_id = decks.id AND
+            next_review - ? <= 0 AND
+            status != 'GRADUATED'
+        ),
+        'cardCountReviewed', (
+          SELECT COUNT(*)
+          FROM cards
+          WHERE
+            deck_id = decks.id AND
+            next_review - ? > 0 AND
+            status != 'GRADUATED'
+        ),
+        'cardCountGraduated', (
+          SELECT COUNT(*)
+          FROM cards
+          WHERE
+            deck_id = decks.id AND
+            status = 'GRADUATED'
+        )
+      )
+    ) AS data
+    FROM decks
+    WHERE user_id = ? AND id = ?
+  `;
+  let [infoResult] = await pool.query(infoQuery, [now, now, userId, deckId]);
   result = result[0];
-  console.log(result);
+  infoResult = infoResult[0].data[0];
+  // Additional info
+  result.deckName = infoResult.deckName;
+  result.cardCount = infoResult.cardCount;
+  result.cardCountDue = infoResult.cardCountDue;
+  result.cardCountReviewed = infoResult.cardCountReviewed;
+  result.cardCountGraduated = infoResult.cardCountGraduated;
   res.status(200).send(result);
 }
