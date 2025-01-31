@@ -29,7 +29,11 @@ export default async function registrationController(req, res) {
       "INSERT INTO users (username, password_hash, password_salt) VALUES (?, ?, ?)";
     // Add new user
     await pool.query(queryInsert, [req.username, saltedPassword, salt]);
-    res.status(200).send(jwtSign({ username: req.username }));
+    const data = {
+      token: jwtSign({ username: req.username }),
+      username: username,
+    };
+    res.status(200).send(data);
     return;
   }
   // No username and/or password

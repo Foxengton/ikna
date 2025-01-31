@@ -21,7 +21,11 @@ export default async function loginController(req, res) {
   // Checking token
   if (tokenUsername) {
     // User authorized (via token)
-    res.status(200).send(jwtSign({ username: tokenUsername }));
+    const data = {
+      token: jwtSign({ username: tokenUsername }),
+      username: tokenUsername,
+    };
+    res.status(200).send(data);
     return;
   }
   // Checking username/password
@@ -37,10 +41,14 @@ export default async function loginController(req, res) {
     const hash = result[0].password_hash;
     // Password check
     const isValid = await argon2.verify(hash, password.concat(salt));
-    if (isValid)
+    if (isValid) {
       // User authorized (via password)
-      res.status(200).send(jwtSign({ username: username }));
-    else res.status(400).send("Wrong username or password");
+      const data = {
+        token: jwtSign({ username: tokenUsername }),
+        username: username,
+      };
+      res.status(200).send(data);
+    } else res.status(400).send("Wrong username or password");
     return;
   }
   // No username/password, no token
