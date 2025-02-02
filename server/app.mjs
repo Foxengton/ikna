@@ -4,8 +4,10 @@ import fs from "fs";
 import initDatabase from "./services/initDatabase.mjs";
 import initControllers from "./services/initControllers.mjs";
 import initSecretKey from "./services/initSecretKey.mjs";
+import cors from "cors";
 
 export const app = express();
+app.use(cors());
 
 // Fetching configs
 console.clear();
