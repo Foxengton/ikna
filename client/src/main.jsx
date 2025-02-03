@@ -7,19 +7,22 @@ import DeckIndex from "./pages/DeckIndex.jsx";
 import DeckStudy from "./pages/DeckStudy.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
+import AuthProvider from "./contexts/AuthProvider.jsx";
 
 const root = document.getElementById("root");
 
 ReactDOM.createRoot(root).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/decks" element={<DeckIndex />} />
-        <Route path="/study/:suid/:name" element={<DeckStudy />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/decks" element={<DeckIndex />} />
+          <Route path="/study/:suid/:name" element={<DeckStudy />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </StrictMode>
 );
