@@ -48,7 +48,7 @@ export default function RegisterPage() {
 
   // Sumbitting account creation request
   async function handleRegister() {
-    if (!checkValidity) return;
+    if (!checkValidity()) return;
     const result = await api("post", "/register", {
       username: username,
       password: password,
