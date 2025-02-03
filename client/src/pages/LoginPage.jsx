@@ -2,20 +2,18 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/Button.jsx";
 import PageWrapper from "../components/PageWrapper.jsx";
-import apiLogin from "../services/apiLogin.jsx";
+import api from "../services/api.jsx";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState([
-    "Username must have 4 or more characters.",
-  ]);
+  const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
 
   // Sumbitting account creation request
   async function loginHandle() {
     setErrors((prev) => (prev = []));
-    const result = await apiLogin({
+    const result = await api("post", "/login", {
       username: username,
       password: password,
     });
