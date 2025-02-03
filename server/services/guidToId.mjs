@@ -5,7 +5,6 @@ export default async function guidToId(guid, table) {
   const query = `SELECT id FROM ${table} WHERE guid = ?`;
   const [result] = await pool.query(query, [guid]);
   // Checking decks with the same ID
-  console.log("GUID LOOKUP:", result);
   if (result.length === 0) {
     return null;
   }

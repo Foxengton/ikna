@@ -29,7 +29,7 @@ export default async function listDecksContoller(req, res) {
   query = `
     SELECT JSON_ARRAYAGG(
       JSON_OBJECT(
-        'id', id, 'deckName', deck_name, "cardCount", card_count,
+        'guid', guid, 'deckName', deck_name, "cardCount", card_count,
         'cardCountDue', (
           SELECT COUNT(*)
           FROM cards

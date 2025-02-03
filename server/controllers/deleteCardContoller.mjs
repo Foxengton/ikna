@@ -23,7 +23,7 @@ export default async function deleteCardContoller(req, res) {
   }
   // Checking card ID
   if (!cardId) {
-    res.status(404).send("Card ID missing");
+    res.status(404).send("Card ID/GUID missing");
     return;
   }
   let query = "SELECT id FROM users WHERE username = ?";

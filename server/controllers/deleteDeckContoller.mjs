@@ -23,7 +23,7 @@ export default async function deleteDeckContoller(req, res) {
   }
   // Checking deck ID
   if (!deckId) {
-    res.status(404).send("Deck ID missing");
+    res.status(404).send("Deck ID/GUID missing");
     return;
   }
   let query = "SELECT id FROM users WHERE username = ?";
