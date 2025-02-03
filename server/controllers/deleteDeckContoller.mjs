@@ -1,5 +1,6 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
+import guidToId from "../services/guidToId.mjs";
 
 export default async function deleteDeckContoller(req, res) {
   /*
@@ -7,20 +8,21 @@ export default async function deleteDeckContoller(req, res) {
     Expected object: {
       token: token,
       data: {
-        deckId: deckId
+        deckId: deckId // deckGuid: deckGuid
       }
     }
   */
   req = req?.body;
   const tokenUsername = jwtVerify(req?.token)?.username;
-  const deckId = req?.data?.deckId;
+  const deckGuid = req?.data?.deckGuid;
+  const deckId = req?.data?.deckId ?? (await guidToId(deckGuid, "decks"));
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");
     return;
   }
   // Checking deck ID
-  if (deckId === undefined) {
+  if (!deckId) {
     res.status(404).send("Deck ID missing");
     return;
   }
@@ -36,7 +38,7 @@ export default async function deleteDeckContoller(req, res) {
   [result] = await pool.query(query, [userId, deckId]);
   // Checking decks with the same ID
   if (result.length === 0) {
-    res.status(400).send(`Deck with ID ${deckId} doesn't exist`);
+    res.status(400).send(`Deck with this ID/GUID doesn't exist`);
     return;
   }
   // Deck deletion

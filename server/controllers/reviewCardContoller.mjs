@@ -1,6 +1,7 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import moment from "moment";
+import guidToId from "../services/guidToId.mjs";
 
 const VERDICTS = [
   { name: "Easy", multiplier: 2.25 },
@@ -17,14 +18,15 @@ export default async function reviewCardContoller(req, res) {
     Expected object: {
       token: token,
       data: {
-        cardId: cardId,
+        cardId: cardId // cardGuid: cardGuid,
         verdict: verdict
       }
     }
   */
   req = req?.body;
   const tokenUsername = jwtVerify(req?.token)?.username;
-  const cardId = req?.data?.cardId;
+  const cardGuid = req?.data?.cardGuid;
+  const cardId = req?.data?.cardId ?? (await guidToId(cardGuid, "cards"));
   const verdict = req?.data?.verdict;
   const verdictObj = VERDICTS.find((item) => item.name === verdict);
   const verdictName = verdictObj?.name;
@@ -36,7 +38,7 @@ export default async function reviewCardContoller(req, res) {
     return;
   }
   // Checking card id
-  if (cardId === undefined) {
+  if (!cardId) {
     res.status(404).send("Card ID missing");
     return;
   }
@@ -62,7 +64,7 @@ export default async function reviewCardContoller(req, res) {
   [result] = await pool.query(query, [userId, cardId]);
   // Checking cards with the same ID
   if (result.length === 0) {
-    res.status(400).send(`Card ID ${cardId} doesn't exist`);
+    res.status(400).send(`Card with this ID/GUID doesn't exist`);
     return;
   }
   let newInterval = Math.trunc(result[0].cur_interval * verdictMult);

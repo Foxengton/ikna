@@ -1,6 +1,7 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import moment from "moment";
+import guidToId from "../services/guidToId.mjs";
 
 export default async function listCardsContoller(req, res) {
   /*
@@ -8,14 +9,15 @@ export default async function listCardsContoller(req, res) {
     Expected object: {
       token: token
       data: {
-        deckId: deckId,
+        deckId: deckId // deckGuid: deckGuid,
         isDue: true/false
       }
     }
   */
   req = req?.body;
   const tokenUsername = jwtVerify(req?.token)?.username;
-  const deckId = req?.data?.deckId;
+  const deckGuid = req?.data?.deckGuid;
+  const deckId = req?.data?.deckId ?? (await guidToId(deckGuid, "decks"));
   const isDue = req?.data?.isDue;
   // Checking token
   if (!tokenUsername) {
@@ -23,7 +25,7 @@ export default async function listCardsContoller(req, res) {
     return;
   }
   // Checking deck name
-  if (deckId === undefined) {
+  if (!deckId) {
     res.status(404).send("Deck ID missing");
     return;
   }

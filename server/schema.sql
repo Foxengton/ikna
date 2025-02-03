@@ -10,6 +10,7 @@ CREATE TABLE users (
 );
 CREATE TABLE cards (
     id int PRIMARY KEY AUTO_INCREMENT,
+    guid char(8),
     user_id int,
     deck_id int,
 	card_front text,

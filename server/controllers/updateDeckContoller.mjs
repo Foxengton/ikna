@@ -1,5 +1,6 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
+import guidToId from "../services/guidToId.mjs";
 
 export default async function updateDeckContoller(req, res) {
   /*
@@ -7,14 +8,15 @@ export default async function updateDeckContoller(req, res) {
     Expected object: {
       token: token,
       data: {
-        deckId: deckId
+        deckId: deckId // deckGuid: deckGuid,
         deckName: deckName (optional)
       }
     }
   */
   req = req?.body;
   const tokenUsername = jwtVerify(req?.token)?.username;
-  const deckId = req?.data?.deckId;
+  const deckGuid = req?.data?.deckGuid;
+  const deckId = req?.data?.deckId ?? (await guidToId(deckGuid, "decks"));
   let deckName = req?.data?.deckName;
   // Checking token
   if (!tokenUsername) {
@@ -22,7 +24,7 @@ export default async function updateDeckContoller(req, res) {
     return;
   }
   // Checking deck ID
-  if (deckId === undefined) {
+  if (!deckId) {
     res.status(404).send("Deck ID missing");
     return;
   }
@@ -38,7 +40,7 @@ export default async function updateDeckContoller(req, res) {
   [result] = await pool.query(query, [userId, deckId]);
   // Checking decks with the same ID
   if (result.length === 0) {
-    res.status(400).send(`Deck with ID ${deckId} doesn't exist`);
+    res.status(400).send(`Deck with this ID/GUID doesn't exist`);
     return;
   }
   deckName = deckName ?? result[0].deck_name;

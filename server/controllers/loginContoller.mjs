@@ -44,7 +44,7 @@ export default async function loginController(req, res) {
     if (isValid) {
       // User authorized (via password)
       const data = {
-        token: jwtSign({ username: tokenUsername }),
+        token: jwtSign({ username: username }),
         username: username,
       };
       res.status(200).send(data);

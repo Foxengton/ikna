@@ -1,6 +1,7 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import moment from "moment";
+import newGuid from "../services/newGuid.mjs";
 
 export default async function addCardContoller(req, res) {
   /*
@@ -8,8 +9,8 @@ export default async function addCardContoller(req, res) {
     Expected object: {
       token: token,
       data: {
-        deckId: deckName
-        cardFront: front
+        deckId: deckName,
+        cardFront: front,
         cardBack: back
       }
     }
@@ -25,8 +26,8 @@ export default async function addCardContoller(req, res) {
     return;
   }
   // Checking deck name
-  if (deckId === undefined) {
-    res.status(404).send("Deck ID missing");
+  if (!deckId) {
+    res.status(404).send("Deck ID/GUID missing");
     return;
   }
   let query = "SELECT id FROM users WHERE username = ?";
@@ -41,17 +42,19 @@ export default async function addCardContoller(req, res) {
   [result] = await pool.query(query, [userId, deckId]);
   // Checking decks with the same ID
   if (result.length === 0) {
-    res.status(400).send(`Deck ID ${deckId} doesn't exist`);
+    res.status(400).send(`Deck ID/GUID doesn't exist`);
     return;
   }
   // Adding card
   query = `
     INSERT INTO cards (
-      user_id, deck_id, card_front, card_back, last_review, next_review, cur_interval, learning_step, status
+      guid, user_id, deck_id, card_front, card_back,
+      last_review, next_review, cur_interval, learning_step, status
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
   await pool.query(query, [
+    await newGuid(),
     userId,
     deckId,
     cardFront,
