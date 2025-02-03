@@ -2,6 +2,9 @@ import { useState } from "react";
 import { NavLink } from "react-router";
 import Button from "../components/Button.jsx";
 import PageWrapper from "../components/PageWrapper.jsx";
+import api from "../services/api.jsx";
+import Cookie from "js-cookie";
+import { useNavigate } from "react-router";
 
 const usernameRegex = new RegExp("^[A-Za-z0-9_-]*$");
 const PASSWORD_MIN_LENGTH = 8;
@@ -12,6 +15,7 @@ export default function RegisterPage() {
   const [usernameErrors, setUsernameErrors] = useState([]);
   const [password, setPassword] = useState("");
   const [passwordErrors, setPasswordErrors] = useState([]);
+  const navigate = useNavigate();
 
   // Check for username and password validity and update error labels
   function checkValidity() {
@@ -43,12 +47,16 @@ export default function RegisterPage() {
   }
 
   // Sumbitting account creation request
-  function createAccount() {
-    let accountData = {
+  async function handleRegister() {
+    if (!checkValidity) return;
+    const result = await api("post", "/register", {
       username: username,
       password: password,
-    };
-    alert(JSON.stringify(accountData));
+    });
+    if (result?.data) {
+      Cookie.set("user-data", JSON.stringify(result.data));
+      navigate("/");
+    }
   }
 
   return (
@@ -106,9 +114,7 @@ export default function RegisterPage() {
             {/* Submit */}
             <Button
               className={"bg-yellow-300 px-4 py-1 font-medium"}
-              onClick={() => {
-                if (checkValidity()) createAccount();
-              }}
+              onClick={() => handleRegister()}
             >
               Create Account
             </Button>

@@ -1,8 +1,10 @@
+import Cookies from "js-cookie";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/Button.jsx";
 import PageWrapper from "../components/PageWrapper.jsx";
 import api from "../services/api.jsx";
+import Cookie from "js-cookie";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -17,8 +19,10 @@ export default function LoginPage() {
       username: username,
       password: password,
     });
-    if (result) navigate("/");
-    else setErrors((prev) => [...prev, "Wrong username or password."]);
+    if (result?.data) {
+      Cookie.set("user-data", JSON.stringify(result.data));
+      navigate("/");
+    } else setErrors((prev) => [...prev, "Wrong username or password."]);
   }
 
   return (
