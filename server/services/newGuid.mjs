@@ -6,8 +6,12 @@ export default async function newGuid() {
   do {
     // Random 8-character guid
     guid = crypto.randomBytes(6).toString("base64url");
-    let query = "SELECT guid FROM decks WHERE guid = ?";
-    [result] = await pool.query(query, [guid]);
+    let query = `
+      SELECT guid FROM decks WHERE guid = ?
+      UNION
+      SELECT guid FROM cards WHERE guid = ?
+    `;
+    [result] = await pool.query(query, [guid, guid]);
   } while (result.length !== 0); // Checking for uniqueness
   return guid;
 }
