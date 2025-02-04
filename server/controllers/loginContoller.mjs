@@ -19,7 +19,7 @@ export default async function loginController(req, res) {
   const username = req?.username;
   const password = req?.password;
   // Checking token
-  if (tokenUsername) {
+  if (tokenUsername && !username && !password) {
     // User authorized (via token)
     const data = {
       token: jwtSign({ username: tokenUsername }),
