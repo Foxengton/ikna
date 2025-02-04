@@ -2,6 +2,7 @@ import { pool } from "../app.mjs";
 import argon2 from "argon2";
 import jwtSign from "../services/jwtSign.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
+import getToken from "../services/getToken.mjs";
 
 export default async function loginController(req, res) {
   /*
@@ -10,12 +11,11 @@ export default async function loginController(req, res) {
       username: username,
       password: password
     }
-    or {
-      token: token
-    }
+    or {} if token is present
   */
+  const token = getToken(req);
   req = req?.body;
-  const tokenUsername = jwtVerify(req?.token)?.username;
+  const tokenUsername = jwtVerify(token)?.username;
   const username = req?.username;
   const password = req?.password;
   // Checking token

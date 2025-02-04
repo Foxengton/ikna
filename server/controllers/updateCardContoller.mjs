@@ -1,25 +1,24 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import guidToId from "../services/guidToId.mjs";
+import getToken from "../services/getToken.mjs";
 
 export default async function updateCardContoller(req, res) {
   /*
     ======= Update card =======
     Expected object: {
-      token: token,
-      data: {
-        cardId: cardId // cardGuid: cardGuid,
-        cardFront: cardFront (optional),
-        cardBack: cardBack (optional)
-      }
+      cardId: cardId // cardGuid: cardGuid,
+      cardFront: cardFront (optional),
+      cardBack: cardBack (optional)
     }
   */
+  const token = getToken(req);
   req = req?.body;
-  const tokenUsername = jwtVerify(req?.token)?.username;
-  const cardGuid = req?.data?.cardGuid;
-  const cardId = req?.data?.cardId ?? (await guidToId(cardGuid, "cards"));
-  let cardFront = req?.data?.cardFront;
-  let cardBack = req?.data?.cardBack;
+  const tokenUsername = jwtVerify(token)?.username;
+  const cardGuid = req?.cardGuid;
+  const cardId = req?.cardId ?? (await guidToId(cardGuid, "cards"));
+  let cardFront = req?.cardFront;
+  let cardBack = req?.cardBack;
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");

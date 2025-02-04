@@ -1,20 +1,19 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import newGuid from "../services/newGuid.mjs";
+import getToken from "../services/getToken.mjs";
 
 export default async function addDeckContoller(req, res) {
   /*
     ======= Add deck =======
     Expected object: {
-      token: token,
-      data: {
-        deckName: deckName
-      }
+      deckName: deckName
     }
   */
+  const token = getToken(req);
   req = req?.body;
-  const tokenUsername = jwtVerify(req?.token)?.username;
-  const deckName = req?.data?.deckName;
+  const tokenUsername = jwtVerify(token)?.username;
+  const deckName = req?.deckName;
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");

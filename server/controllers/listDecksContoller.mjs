@@ -1,16 +1,16 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import moment from "moment";
+import getToken from "../services/getToken.mjs";
 
 export default async function listDecksContoller(req, res) {
   /*
     ======= List decks =======
-    Expected object: {
-      token: token
-    }
+    Expected object: {}
   */
+  const token = getToken(req);
   req = req?.body;
-  const tokenUsername = jwtVerify(req?.token)?.username;
+  const tokenUsername = jwtVerify(token)?.username;
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");

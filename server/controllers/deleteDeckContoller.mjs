@@ -1,21 +1,20 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import guidToId from "../services/guidToId.mjs";
+import getToken from "../services/getToken.mjs";
 
 export default async function deleteDeckContoller(req, res) {
   /*
     ======= Delete deck =======
     Expected object: {
-      token: token,
-      data: {
-        deckId: deckId // deckGuid: deckGuid
-      }
+      deckId: deckId // deckGuid: deckGuid
     }
   */
+  const token = getToken(req);
   req = req?.body;
-  const tokenUsername = jwtVerify(req?.token)?.username;
-  const deckGuid = req?.data?.deckGuid;
-  const deckId = req?.data?.deckId ?? (await guidToId(deckGuid, "decks"));
+  const tokenUsername = jwtVerify(token)?.username;
+  const deckGuid = req?.deckGuid;
+  const deckId = req?.deckId ?? (await guidToId(deckGuid, "decks"));
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");

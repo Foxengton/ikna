@@ -1,21 +1,20 @@
 import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import guidToId from "../services/guidToId.mjs";
+import getToken from "../services/getToken.mjs";
 
 export default async function deleteCardContoller(req, res) {
   /*
     ======= Delete card =======
     Expected object: {
-      token: token,
-      data: {
-        cardId: cardId // cardGuid: cardGuid
-      }
+      cardId: cardId // cardGuid: cardGuid
     }
   */
+  const token = getToken(req);
   req = req?.body;
-  const tokenUsername = jwtVerify(req?.token)?.username;
-  const cardGuid = req?.data?.cardGuid;
-  const cardId = req?.data?.cardId ?? (await guidToId(cardGuid, "cards"));
+  const tokenUsername = jwtVerify(token)?.username;
+  const cardGuid = req?.cardGuid;
+  const cardId = req?.cardId ?? (await guidToId(cardGuid, "cards"));
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");

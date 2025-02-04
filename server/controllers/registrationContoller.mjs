@@ -2,6 +2,7 @@ import { pool } from "../app.mjs";
 import crypto from "node:crypto";
 import argon2 from "argon2";
 import jwtSign from "../services/jwtSign.mjs";
+import getToken from "../services/getToken.mjs";
 
 export default async function registrationController(req, res) {
   /*

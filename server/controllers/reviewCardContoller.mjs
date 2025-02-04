@@ -2,6 +2,7 @@ import { pool } from "../app.mjs";
 import jwtVerify from "../services/jwtVerify.mjs";
 import moment from "moment";
 import guidToId from "../services/guidToId.mjs";
+import getToken from "../services/getToken.mjs";
 
 const VERDICTS = [
   { name: "Easy", multiplier: 2.25 },
@@ -16,18 +17,16 @@ export default async function reviewCardContoller(req, res) {
   /*
     ======= Review card =======
     Expected object: {
-      token: token,
-      data: {
-        cardId: cardId // cardGuid: cardGuid,
-        verdict: verdict
-      }
+      cardId: cardId // cardGuid: cardGuid,
+      verdict: verdict
     }
   */
+  const token = getToken(req);
   req = req?.body;
-  const tokenUsername = jwtVerify(req?.token)?.username;
-  const cardGuid = req?.data?.cardGuid;
-  const cardId = req?.data?.cardId ?? (await guidToId(cardGuid, "cards"));
-  const verdict = req?.data?.verdict;
+  const tokenUsername = jwtVerify(token)?.username;
+  const cardGuid = req?.cardGuid;
+  const cardId = req?.cardId ?? (await guidToId(cardGuid, "cards"));
+  const verdict = req?.verdict;
   const verdictObj = VERDICTS.find((item) => item.name === verdict);
   const verdictName = verdictObj?.name;
   const verdictMult = verdictObj?.multiplier;
