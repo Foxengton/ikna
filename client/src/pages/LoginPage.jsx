@@ -1,16 +1,17 @@
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router";
 import Button from "../components/Button.jsx";
 import PageWrapper from "../components/PageWrapper.jsx";
 import api from "../services/api.jsx";
-import Cookie from "js-cookie";
+import { AuthContext } from "../contexts/AuthProvider.jsx";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const navigate = useNavigate();
+  const [userData, setUserData] = useContext(AuthContext);
 
   // Sumbitting account creation request
   async function loginHandle() {
@@ -20,7 +21,7 @@ export default function LoginPage() {
       password: password,
     });
     if (result?.data) {
-      Cookie.set("user-data", JSON.stringify(result.data));
+      setUserData(result?.data);
       navigate("/");
     } else setErrors((prev) => [...prev, "Wrong username or password."]);
   }
