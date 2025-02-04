@@ -16,7 +16,6 @@ export default async function api(method, url, data = null) {
     console.log(error.code);
     return null;
   });
-  console.log(result);
   if (result) {
     return result;
   }

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { NavLink } from "react-router";
 import Button from "../components/Button.jsx";
-import AuthContext from "../contexts/AuthContext.jsx";
+import { AuthContext } from "../contexts/AuthProvider.jsx";
 
 export default function NavigationBar() {
   const username = useContext(AuthContext)?.username;

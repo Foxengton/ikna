@@ -4,7 +4,7 @@ export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   const [userData, setUserData] = useState(
-    JSON.parse(Cookies.get("user-data"))
+    JSON.parse(Cookies.get("user-data") ?? "null")
   );
   return (
     <AuthContext.Provider value={userData}>{children}</AuthContext.Provider>
