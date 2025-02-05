@@ -23,6 +23,6 @@ export default async function initControllers() {
   app.post("/api/card/add", (req, res) => addCardContoller(req, res));
   app.patch("/api/card/update", (req, res) => updateCardContoller(req, res));
   app.delete("/api/card/delete", (req, res) => deleteCardContoller(req, res));
-  app.get("/api/card/list", (req, res) => listCardsContoller(req, res));
+  app.post("/api/card/list", (req, res) => listCardsContoller(req, res));
   app.patch("/api/card/review", (req, res) => reviewCardContoller(req, res));
 }

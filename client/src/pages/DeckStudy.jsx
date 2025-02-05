@@ -1,67 +1,85 @@
 import PageWrapper from "../components/PageWrapper.jsx";
-import userData from "../data.js";
-import { NavLink, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import Button from "../components/Button.jsx";
+import api from "../services/api.jsx";
+import {
+  PiNoteFill,
+  PiGraduationCapFill,
+  PiHeadCircuitFill,
+  PiTimerFill,
+  PiNotePencilFill,
+  PiTrashFill,
+} from "react-icons/pi";
 
 const controlButtons = [
   {
     text: "Again",
+    verdict: "Again",
     bg: "bg-red-300",
-    difficultyFactor: 0,
   },
   {
     text: "Hard",
+    verdict: "Hard",
     bg: "bg-orange-300",
-    difficultyFactor: 0.8,
   },
   {
     text: "Good",
+    verdict: "Good",
     bg: "bg-green-300",
-    difficultyFactor: 1,
   },
   {
     text: "Easy",
+    verdict: "Easy",
     bg: "bg-teal-300",
-    difficultyFactor: 1.25,
   },
 ];
-const INTERVAL_FACTOR = 1.8;
 
 export default function DeckStudy() {
   let navigate = useNavigate();
   let params = useParams();
   const [deckData, setDeckData] = useState(null);
-  const [pendingCards, setPendingCards] = useState(null);
   const [cardSide, setCardSide] = useState("front");
-  let nextInterval = deckData?.nextInterval;
+  const cardList = deckData?.data ?? [];
 
-  // Params
   useEffect(() => {
-    // Checking for SUID
-    if (!params?.suid) navigate("/decks");
-    // Checking for matching decks by SUID
-    setDeckData(userData.decks.find((deck) => deck.suid == params.suid));
+    async function fetchData() {
+      const result = await api("post", "/card/list", {
+        deckGuid: params?.suid,
+      });
+      setDeckData(result?.data);
+      console.log("CARD LIST\n", result?.data);
+    }
+    fetchData();
   }, []);
-  useEffect(() => {
-    // Navigating back if the deck data is missing
-    if (deckData === undefined) navigate("/decks");
-    // Updating local card list
-    setPendingCards(
-      deckData?.cards.filter(
-        (card) =>
-          card.lastReview === null ||
-          Date.now() - card.lastReview >= card.nextInterval
-      )
-    );
-    console.log(pendingCards);
-  }, [deckData]);
 
   if (!deckData) return <PageWrapper />;
   return (
     <PageWrapper>
-      {pendingCards ? (
+      {cardList.length != 0 ? (
         <>
+          {/* Header */}
+          <header className="flex flex-row gap-8 justify-center items-center bg-slate-200 py-4">
+            <div className="font-semibold">{deckData.deckName}</div>
+            <div className="flex gap-4">
+              <div className="flex gap-1">
+                <span>{deckData.cardCountDue}</span>
+                <PiTimerFill size="1.4rem" />
+              </div>
+              <div className="flex gap-1">
+                <span>{deckData.cardCountReviewed}</span>
+                <PiHeadCircuitFill size="1.4rem" />
+              </div>
+              <div className="flex gap-1">
+                <span>{deckData.cardCountGraduated}</span>
+                <PiGraduationCapFill size="1.4rem" />
+              </div>
+              <div className="flex gap-1">
+                <span>{deckData.cardCount}</span>
+                <PiNoteFill size="1.4rem" />
+              </div>
+            </div>
+          </header>
           <section className="flex flex-col justify-center items-center">
             {/* Card */}
             <div
@@ -75,11 +93,11 @@ export default function DeckStudy() {
               {/* Displaying card sides */}
               {cardSide === "front" ? (
                 <div className="flex justify-center items-center font-semibold w-96 min-h-96 p-8 text-2xl bg-white text-black">
-                  {pendingCards[0].front}
+                  {cardList[0].cardFront}
                 </div>
               ) : (
                 <div className="flex justify-center items-center font-semibold w-96 min-h-96 p-8 text-2xl bg-slate-700 text-white">
-                  {pendingCards[0].back}
+                  {cardList[0].cardBack}
                 </div>
               )}
             </div>

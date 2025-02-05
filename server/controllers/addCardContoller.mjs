@@ -3,12 +3,13 @@ import jwtVerify from "../services/jwtVerify.mjs";
 import moment from "moment";
 import newGuid from "../services/newGuid.mjs";
 import getToken from "../services/getToken.mjs";
+import guidToId from "../services/guidToId.mjs";
 
 export default async function addCardContoller(req, res) {
   /*
     ======= Add card =======
     Expected object: {
-      deckId: deckName,
+      deckId: deckId // deckGuid: deckGuid
       cardFront: front,
       cardBack: back
     }
@@ -16,7 +17,8 @@ export default async function addCardContoller(req, res) {
   const token = getToken(req);
   req = req?.body;
   const tokenUsername = jwtVerify(token)?.username;
-  const deckId = req?.deckId;
+  const deckGuid = req?.deckGuid;
+  const deckId = req?.deckId ?? (await guidToId(deckGuid, "decks"));
   const cardFront = req?.cardFront;
   const cardBack = req?.cardBack;
   // Checking token
@@ -50,7 +52,7 @@ export default async function addCardContoller(req, res) {
       guid, user_id, deck_id, card_front, card_back,
       last_review, next_review, cur_interval, learning_step, status
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
   await pool.query(query, [
     await newGuid(),

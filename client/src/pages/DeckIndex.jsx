@@ -23,7 +23,7 @@ export default function DeckIndex() {
     async function fetchData() {
       const result = await api("get", "/deck/list");
       setDeckList(result?.data);
-      console.log(result?.data);
+      console.log("DECK LIST\n", result?.data);
     }
     fetchData();
   }, []);

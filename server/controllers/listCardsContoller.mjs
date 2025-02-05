@@ -25,7 +25,7 @@ export default async function listCardsContoller(req, res) {
   }
   // Checking deck name
   if (!deckId) {
-    res.status(404).send("Deck ID missing");
+    res.status(404).send("Deck GUID/ID missing");
     return;
   }
   let query = "SELECT id FROM users WHERE username = ?";
