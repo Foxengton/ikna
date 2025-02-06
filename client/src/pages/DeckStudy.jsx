@@ -3,14 +3,8 @@ import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import Button from "../components/Button.jsx";
 import api from "../services/api.jsx";
-import {
-  PiNoteFill,
-  PiGraduationCapFill,
-  PiHeadCircuitFill,
-  PiTimerFill,
-  PiNotePencilFill,
-  PiTrashFill,
-} from "react-icons/pi";
+import DeckInfoHeader from "../components/DeckInfoHeader.jsx";
+import Card from "../components/Card.jsx";
 
 const controlButtons = [
   {
@@ -39,7 +33,6 @@ export default function DeckStudy() {
   let navigate = useNavigate();
   let params = useParams();
   const [deckData, setDeckData] = useState({});
-  const [cardSide, setCardSide] = useState("front");
   const [cardList, setCardList] = useState([]);
 
   async function fetchDeckData() {
@@ -73,49 +66,9 @@ export default function DeckStudy() {
     <PageWrapper>
       {cardList.length != 0 ? (
         <>
-          {/* Header */}
-          <header className="flex flex-row gap-8 justify-center items-center bg-slate-300 py-4">
-            <div className="font-semibold">{deckData.deckName}</div>
-            <div className="flex gap-4">
-              <div className="flex gap-1">
-                <span>{deckData.cardCountDue}</span>
-                <PiTimerFill size="1.4rem" />
-              </div>
-              <div className="flex gap-1">
-                <span>{deckData.cardCountReviewed}</span>
-                <PiHeadCircuitFill size="1.4rem" />
-              </div>
-              <div className="flex gap-1">
-                <span>{deckData.cardCountGraduated}</span>
-                <PiGraduationCapFill size="1.4rem" />
-              </div>
-              <div className="flex gap-1">
-                <span>{deckData.cardCount}</span>
-                <PiNoteFill size="1.4rem" />
-              </div>
-            </div>
-          </header>
+          <DeckInfoHeader deckData={deckData} />
           <section className="flex flex-col justify-center items-center">
-            {/* Card */}
-            <div
-              className="flex justify-center items-center shadow-xl mt-16 mb-8"
-              onClick={() => {
-                // Switching card side
-                if (cardSide === "front") setCardSide("back");
-                else setCardSide("front");
-              }}
-            >
-              {/* Displaying card sides */}
-              {cardSide === "front" ? (
-                <div className="flex justify-center items-center font-semibold w-96 min-h-96 p-8 text-2xl bg-white text-black">
-                  {cardList[0].cardFront}
-                </div>
-              ) : (
-                <div className="flex justify-center items-center font-semibold w-96 min-h-96 p-8 text-2xl bg-slate-700 text-white">
-                  {cardList[0].cardBack}
-                </div>
-              )}
-            </div>
+            <Card cardData={cardList[0]} />
           </section>
           {/* Card control buttons */}
           <section className="flex gap-3 justify-center">
