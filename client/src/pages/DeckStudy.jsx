@@ -38,20 +38,35 @@ const controlButtons = [
 export default function DeckStudy() {
   let navigate = useNavigate();
   let params = useParams();
-  const [deckData, setDeckData] = useState(null);
+  const [deckData, setDeckData] = useState({});
   const [cardSide, setCardSide] = useState("front");
-  const cardList = deckData?.data ?? [];
+  const [cardList, setCardList] = useState([]);
+
+  async function fetchDeckData() {
+    const result = await api("post", "/card/list", {
+      deckGuid: params?.suid,
+      isDue: true,
+    });
+    setDeckData(result?.data);
+    console.log("DECK DATA\n", result?.data);
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      const result = await api("post", "/card/list", {
-        deckGuid: params?.suid,
-      });
-      setDeckData(result?.data);
-      console.log("CARD LIST\n", result?.data);
-    }
-    fetchData();
+    // Fetch data only when the card list is empty
+    fetchDeckData();
   }, []);
+
+  useEffect(() => {
+    setCardList(deckData?.data ?? []);
+  }, [deckData]);
+
+  async function handleVerdict(verdict) {
+    const result = await api("patch", "/card/review", {
+      cardGuid: cardList[0].guid,
+      verdict: verdict,
+    });
+    fetchDeckData();
+  }
 
   if (!deckData) return <PageWrapper />;
   return (
@@ -59,7 +74,7 @@ export default function DeckStudy() {
       {cardList.length != 0 ? (
         <>
           {/* Header */}
-          <header className="flex flex-row gap-8 justify-center items-center bg-slate-200 py-4">
+          <header className="flex flex-row gap-8 justify-center items-center bg-slate-300 py-4">
             <div className="font-semibold">{deckData.deckName}</div>
             <div className="flex gap-4">
               <div className="flex gap-1">
@@ -109,6 +124,7 @@ export default function DeckStudy() {
                 <span className="text-sm">1 days</span>
                 <Button
                   className={"mt-1 min-w-20 flex justify-center " + btn.bg}
+                  onClick={() => handleVerdict(btn.verdict)}
                 >
                   {btn.text}
                 </Button>
