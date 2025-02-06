@@ -49,7 +49,8 @@ export default async function listCardsContoller(req, res) {
     query = `
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
-          'guid', guid, 'cardFront', card_front, 'cardBack', card_back
+          'guid', guid, 'cardFront', card_front,
+          'cardBack', card_back, 'status', status
         )
       ) AS data
       FROM cards
@@ -66,7 +67,8 @@ export default async function listCardsContoller(req, res) {
     query = `
       SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
-          'guid', guid, 'cardFront', card_front, 'cardBack', card_back
+          'guid', guid, 'cardFront', card_front,
+          'cardBack', card_back, 'status', status
         )
       ) AS data
       FROM cards
