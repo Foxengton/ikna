@@ -67,7 +67,7 @@ export default function DeckStudy() {
       {cardList.length != 0 ? (
         <>
           <DeckInfoHeader deckData={deckData} />
-          <section className="flex flex-col justify-center items-center">
+          <section className="flex justify-center items-center mt-8 mb-8">
             <Card cardData={cardList[0]} />
           </section>
           {/* Card control buttons */}

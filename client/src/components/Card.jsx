@@ -5,7 +5,7 @@ export default function Card({ cardData }) {
 
   return (
     <div
-      className="flex justify-center items-center shadow-xl mt-16 mb-8"
+      className="flex justify-center items-center shadow-xl"
       onClick={() => {
         // Switching card side
         if (cardSide === "front") setCardSide("back");
