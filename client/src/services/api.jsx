@@ -2,16 +2,20 @@ import axios from "axios";
 import config from "../config.json";
 import Cookies from "js-cookie";
 import { useContext } from "react";
-
-const token = JSON.parse(Cookies.get("user-data") ?? "null")?.token;
-axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-axios.defaults.baseURL = config.serverBaseUrl;
+import { AuthContext } from "../contexts/AuthProvider";
 
 export default async function api(method, url, data = null) {
+  const token = JSON.parse(Cookies.get("user-data") ?? "null")?.token;
   const result = await axios({
     method: method,
     url: url,
+    baseURL: config.serverBaseUrl,
     data: data,
+    headers: {
+      common: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
   }).catch((error) => {
     console.log(error.code);
     return null;

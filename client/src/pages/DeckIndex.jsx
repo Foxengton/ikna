@@ -16,7 +16,8 @@ import {
 
 export default function DeckIndex() {
   const navigate = useNavigate();
-  const token = useContext(AuthContext)?.token;
+  const [userData, setUserData] = useContext(AuthContext);
+  const token = userData?.token;
   const [deckList, setDeckList] = useState([]);
 
   useEffect(() => {

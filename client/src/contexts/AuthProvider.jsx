@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
+
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
