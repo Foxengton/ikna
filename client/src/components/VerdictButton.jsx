@@ -35,33 +35,33 @@ const VERDICTS = [
 
 const LEARNING_STEPS = [{ m: 1 }, { m: 5 }, { d: 1 }];
 
-export default function VerdictButton({ cardInfo, verdict, afterClick }) {
+export default function VerdictButton({ cardData, verdict, afterClick }) {
   // Predicting the next time interval
   function verdictTimeEstimation() {
     let time;
     // Show no time for Again verdict
     if (button.multiplier == 0) return null;
-    if (cardInfo.status === "LEARNING")
-      time = LEARNING_STEPS[cardInfo.learningStep];
-    if (cardInfo.status === "MEMORIZING")
-      time = cardInfo.currentInterval * button.multiplier;
+    if (cardData.status === "LEARNING")
+      time = LEARNING_STEPS[cardData.learningStep];
+    if (cardData.status === "MEMORIZING")
+      time = cardData.currentInterval * button.multiplier;
     return moment.duration(time, "seconds").humanize();
   }
 
   // Submit verdict
   async function handleClick() {
     const result = await api("patch", "/card/review", {
-      cardGuid: cardInfo.guid,
+      cardGuid: cardData.guid,
       verdict: verdict,
     });
   }
 
   // Find verdict in the list of possible verdicts
   const button = VERDICTS.find((item) => item.verdict === verdict);
-  if (!cardInfo || !button) return null;
+  if (!cardData || !button) return null;
   // Not showing Easy and Hard buttons for cards on the learning stage
   if (
-    cardInfo.status === "LEARNING" &&
+    cardData.status === "LEARNING" &&
     (verdict === "Easy" || verdict === "Hard")
   )
     return null;

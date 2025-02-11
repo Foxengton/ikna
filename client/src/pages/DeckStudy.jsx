@@ -24,15 +24,12 @@ export default function DeckStudy() {
   }
 
   useEffect(() => {
-    // Fetch data only when the card list is empty
     fetchDeckData();
   }, []);
 
   useEffect(() => {
     setCardList(deckData?.data ?? []);
   }, [deckData]);
-
-  // Return the next estimated interval depedning on verdict and card status
 
   if (!deckData) return <PageWrapper />;
   return (
@@ -46,22 +43,22 @@ export default function DeckStudy() {
           {/* Card control buttons */}
           <section className="flex gap-3 justify-center items-end">
             <VerdictButton
-              cardInfo={cardList[0]}
+              cardData={cardList[0]}
               afterClick={fetchDeckData}
               verdict="Again"
             />
             <VerdictButton
-              cardInfo={cardList[0]}
+              cardData={cardList[0]}
               afterClick={fetchDeckData}
               verdict="Hard"
             />
             <VerdictButton
-              cardInfo={cardList[0]}
+              cardData={cardList[0]}
               afterClick={fetchDeckData}
               verdict="Good"
             />
             <VerdictButton
-              cardInfo={cardList[0]}
+              cardData={cardList[0]}
               afterClick={fetchDeckData}
               verdict="Easy"
             />
