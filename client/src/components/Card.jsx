@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRef } from "react";
+import api from "../services/api.jsx";
+
 import { PiArrowUUpLeftFill } from "react-icons/pi";
 
 export default function Card({ cardData, isEditable = false }) {
@@ -14,6 +16,7 @@ export default function Card({ cardData, isEditable = false }) {
       ? [frontContent, setFrontContent]
       : [backContent, setBackContent];
   const textBox = useRef(null);
+  const [unsavedFlag, setUnsavedFlag] = useState(false);
   const [lineCount, setLineCount] = useState(0);
   const textAlign = lineCount <= 1 ? "text-center" : "text-start";
 
@@ -29,8 +32,23 @@ export default function Card({ cardData, isEditable = false }) {
     );
   }, [cardContent]);
 
-  function handleInputChange(e) {
-    setCardContent(e.target.value);
+  function handleInputChange() {
+    const box = textBox.current;
+    setUnsavedFlag(box.value != cardContent);
+    setCardContent(box.value);
+  }
+
+  async function handleInputSubmit() {
+    if (!unsavedFlag) return;
+    const box = textBox.current;
+    const data = {
+      cardGuid: cardData.guid,
+      cardFront: frontContent,
+      cardBack: backContent,
+    };
+    const result = await api("patch", "/card/update", data);
+    console.log("CARD UPDATED:", data);
+    setUnsavedFlag(false);
   }
 
   return (
@@ -56,7 +74,8 @@ export default function Card({ cardData, isEditable = false }) {
               value={cardContent}
               placeholder="Empty card"
               onClick={(e) => e.stopPropagation()}
-              onChange={(e) => handleInputChange(e)}
+              onChange={() => handleInputChange()}
+              onBlur={async () => await handleInputSubmit()}
             />
           </div>
         </div>
