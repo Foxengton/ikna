@@ -12,7 +12,9 @@ import {
   PiTimerFill,
   PiNotePencilFill,
   PiTrashFill,
+  PiPlusCircleFill,
 } from "react-icons/pi";
+import Button from "../components/Button.jsx";
 
 export default function DeckIndex() {
   const navigate = useNavigate();
@@ -21,13 +23,14 @@ export default function DeckIndex() {
   const [deckList, setDeckList] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const result = await api("get", "/deck/list");
-      setDeckList(result?.data);
-      console.log("DECK LIST\n", result?.data);
-    }
-    fetchData();
+    fetchDeckData();
   }, []);
+
+  async function fetchDeckData() {
+    const result = await api("get", "/deck/list");
+    setDeckList(result?.data);
+    console.log("DECK LIST\n", result?.data);
+  }
 
   // Navigate to study page
   function clickTitleHandle(deck) {
@@ -39,65 +42,93 @@ export default function DeckIndex() {
       .replace(/^-+|-+$/g, "");
     navigate(`/study/${deck.guid}/${deckName}`);
   }
-  function clickEditHandle(deck) {}
-  function clickDeleteHandle(deck) {}
+
+  async function addDeckHandle() {
+    const result = await api("post", "/deck/add", {
+      deckName: "New deck",
+    });
+    fetchDeckData();
+  }
+
+  async function deleteDeckHandle(deck) {
+    const result = await api("delete", "/deck/delete", {
+      deckGuid: deck.guid,
+    });
+    fetchDeckData();
+  }
+
+  function editDeckHandle(deck) {
+    navigate("/edit/" + deck.guid);
+  }
 
   if (!deckList) return <PageWrapper />;
   return (
     <PageWrapper>
       {/* Decks list */}
-      <section className="flex flex-col justify-center items-center">
-        <table className="mt-16 bg-slate-50 shadow-lg p-2">
-          <tbody>
-            <tr className="bg-slate-200">
-              <td className="py-2 px-4 font-semibold">My decks</td>
-              <td className="py-2 px-2 font-semibold">
-                <PiTimerFill size="1.4rem" />
-              </td>
-              <td className="py-2 px-2 font-semibold">
-                <PiHeadCircuitFill size="1.4rem" />
-              </td>
-              <td className="py-2 px-2 font-semibold">
-                <PiGraduationCapFill size="1.4rem" />
-              </td>
-              <td className="py-2 px-2 font-semibold">
-                <PiNoteFill size="1.4rem" />
-              </td>
-              <td />
-              <td />
-            </tr>
-            {deckList.map((deck, index) => (
-              <tr key={index} className="hover:bg-yellow-100">
-                <td
-                  className="py-2 px-4 hover:bg-yellow-300"
-                  onClick={() => clickTitleHandle(deck)}
-                >
-                  {deck.deckName}
+      <section className="flex flex-col justify-center items-center rounded-md">
+        <div className="flex flex-col w-fit gap-2">
+          <table className="mt-16 bg-slate-50 shadow-lg p-2 rounded-md overflow-hidden">
+            <tbody>
+              <tr className="bg-slate-200">
+                <td className="py-2 px-4 font-semibold">My decks</td>
+                <td className="py-2 px-2 font-semibold">
+                  <PiTimerFill size="1.4rem" />
                 </td>
-                <td className="py-2 px-2 text-center">{deck.cardCountDue}</td>
-                <td className="py-2 px-2 text-center">
-                  {deck.cardCountReviewed}
+                <td className="py-2 px-2 font-semibold">
+                  <PiHeadCircuitFill size="1.4rem" />
                 </td>
-                <td className="py-2 px-2 text-center">
-                  {deck.cardCountGraduated}
+                <td className="py-2 px-2 font-semibold">
+                  <PiGraduationCapFill size="1.4rem" />
                 </td>
-                <td className="py-2 px-2 text-center">{deck.cardCount}</td>
-                <td
-                  className="py-2 px-2 text-center hover:bg-yellow-300"
-                  onClick={() => clickEditHandle(deck)}
-                >
-                  <PiNotePencilFill size="1.4rem" />
+                <td className="py-2 px-2 font-semibold">
+                  <PiNoteFill size="1.4rem" />
                 </td>
-                <td
-                  className="py-2 px-2 text-center hover:bg-yellow-300"
-                  onClick={() => clickDeleteHandle(deck)}
-                >
-                  <PiTrashFill size="1.4rem" />
-                </td>
+                <td />
+                <td />
               </tr>
-            ))}
-          </tbody>
-        </table>
+              {deckList.map((deck, index) => (
+                <tr key={index} className="hover:bg-yellow-100">
+                  <td
+                    className="py-2 px-4 hover:bg-yellow-300"
+                    onClick={() => clickTitleHandle(deck)}
+                  >
+                    {deck.deckName}
+                  </td>
+                  <td className="py-2 px-2 text-center">{deck.cardCountDue}</td>
+                  <td className="py-2 px-2 text-center">
+                    {deck.cardCountReviewed}
+                  </td>
+                  <td className="py-2 px-2 text-center">
+                    {deck.cardCountGraduated}
+                  </td>
+                  <td className="py-2 px-2 text-center">{deck.cardCount}</td>
+                  <td
+                    className="py-2 px-2 text-center hover:bg-yellow-300"
+                    onClick={() => editDeckHandle(deck)}
+                  >
+                    <PiNotePencilFill size="1.4rem" />
+                  </td>
+                  <td
+                    className="py-2 px-2 text-center hover:bg-yellow-300"
+                    onClick={async () => await deleteDeckHandle(deck)}
+                  >
+                    <PiTrashFill size="1.4rem" />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/* New deck button */}
+          <Button
+            className="bg-yellow-300"
+            onClick={async () => await addDeckHandle()}
+          >
+            <div className="flex flex-row gap-2 justify-center items-center font-semibold">
+              <PiPlusCircleFill size="1.4rem" />
+              <span>New deck</span>
+            </div>
+          </Button>
+        </div>
       </section>
     </PageWrapper>
   );
