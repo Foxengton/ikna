@@ -20,16 +20,13 @@ export default function DeckStudy() {
       isDue: true,
     });
     setDeckData(result?.data);
+    setCardList(result?.data?.data ?? []);
     console.log("DECK DATA\n", result?.data);
   }
 
   useEffect(() => {
     fetchDeckData();
   }, []);
-
-  useEffect(() => {
-    setCardList(deckData?.data ?? []);
-  }, [deckData]);
 
   if (!deckData) return <PageWrapper />;
   return (
@@ -38,7 +35,12 @@ export default function DeckStudy() {
         <>
           <DeckInfoHeader deckData={deckData} />
           <section className="flex justify-center items-center mt-8 mb-8">
-            <Card cardData={cardList[0]} />
+            <Card
+              key={cardList[0].guid}
+              cardData={cardList[0]}
+              deleteControls={false}
+              infoBar={false}
+            />
           </section>
           {/* Card control buttons */}
           <section className="flex gap-3 justify-center items-end">
