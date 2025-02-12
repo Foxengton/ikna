@@ -21,7 +21,7 @@ export default function DeckEdit() {
   async function fetchDeckData() {
     const result = await api("post", "/card/list", { deckGuid: params?.guid });
     setDeckData(result?.data);
-    setCardList(result?.data?.data);
+    setCardList(result?.data?.data ?? []);
     console.log("CARD LIST\n", cardList);
   }
 
@@ -40,8 +40,14 @@ export default function DeckEdit() {
       <section className="flex flex-col justify-center items-center rounded-md mb-32">
         <div className="grid grid-cols-4 gap-4 mt-8">
           {/* Card grid */}
-          {cardList.map((card, index) => (
-            <Card cardData={card} key={index} />
+          {cardList.map((card) => (
+            <Card
+              cardData={card}
+              key={card.guid}
+              updateFunction={async () => fetchDeckData()}
+              defaultMode="edit"
+              editControls={false}
+            />
           ))}
         </div>
       </section>

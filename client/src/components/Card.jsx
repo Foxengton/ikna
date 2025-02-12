@@ -2,12 +2,23 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import api from "../services/api.jsx";
+import moment from "moment";
 
-import { PiNotePencilFill } from "react-icons/pi";
-import { PiEyeBold } from "react-icons/pi";
+import { PiNotePencilFill, PiTrash, PiEyeBold } from "react-icons/pi";
 
-export default function Card({ cardData, editable = false }) {
-  const [cardSide, setCardSide] = useState("front");
+export default function Card({
+  cardData,
+  updateFunction = async () => {},
+  editControls = true,
+  deleteControls = true,
+  infoBar = true,
+  flipControls = true,
+  defaultSide = "front",
+  defaultMode = "view",
+}) {
+  if (defaultMode !== "view" && defaultMode !== "edit") defaultMode = "view";
+  if (defaultSide !== "front" && defaultSide !== "back") defaultSide = "front";
+  const [cardSide, setCardSide] = useState(defaultSide);
   const sideStyle =
     cardSide === "front" ? "bg-white text-black" : "bg-slate-700 text-white";
   const [frontContent, setFrontContent] = useState(cardData.cardFront);
@@ -20,12 +31,17 @@ export default function Card({ cardData, editable = false }) {
   const [unsavedFlag, setUnsavedFlag] = useState(false);
   const [lineCount, setLineCount] = useState(0);
   const textAlign = lineCount <= 1 ? "text-center" : "text-start";
-  const [isEditable, setIsEditable] = useState(editable);
-  const editableStyle = isEditable
-    ? `shadow-inner rounded ${
-        cardSide === "front" ? "bg-slate-100" : "bg-slate-600"
-      }`
-    : null;
+  const [mode, setMode] = useState(defaultMode);
+  const modeStyle =
+    mode === "edit"
+      ? `shadow-inner rounded ${
+          cardSide === "front" ? "bg-slate-100" : "bg-slate-600"
+        }`
+      : null;
+  const placeHolder = cardSide === "front" ? "Empty front" : "Empty back";
+  const editControlsStyle = editControls ? "visible" : "invisible";
+  const deleteControlsStyle = deleteControls ? "visible" : "invisible";
+  const infoBarStyle = infoBar ? "visible" : "invisible";
 
   // Auto growth/shrinking of the textbox
   useEffect(() => {
@@ -58,11 +74,19 @@ export default function Card({ cardData, editable = false }) {
     setUnsavedFlag(false);
   }
 
+  async function handleCardDelete() {
+    const data = { cardGuid: cardData.guid };
+    const result = await api("delete", "/card/delete", data);
+    console.log("CARD DELETED:", data);
+    await updateFunction();
+  }
+
   return (
     <div
       className="flex justify-center items-center shadow-xl rounded-lg"
       onClick={() => {
         // Switching card side
+        if (!flipControls) return;
         if (cardSide === "front") setCardSide("back");
         else setCardSide("front");
       }}
@@ -74,29 +98,47 @@ export default function Card({ cardData, editable = false }) {
         <div className="w-full">
           <textarea
             ref={textBox}
-            readOnly={!isEditable}
-            disabled={!isEditable}
-            className={`overflow-auto resize-none w-full px-2 py-2 ${textAlign} ${editableStyle}`}
+            readOnly={mode === "view"}
+            disabled={mode === "view"}
+            className={`overflow-auto resize-none w-full px-2 py-2 ${textAlign} ${modeStyle}`}
             value={cardContent}
-            placeholder="Empty card"
+            placeholder={placeHolder}
             onClick={(e) => e.stopPropagation()}
             onChange={() => handleInputChange()}
             onBlur={async () => await handleInputSubmit()}
           />
         </div>
-        {/* Edit/view icon */}
-        <div
-          className="absolute top-0 right-0 p-4 hover:text-yellow-500"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsEditable(!isEditable);
-          }}
-        >
-          {!isEditable ? (
-            <PiNotePencilFill size="1.4rem" />
-          ) : (
-            <PiEyeBold size="1.4rem" />
-          )}
+        {/* Controls */}
+        <div className="absolute top-0 right-0 w-full flex flex-row justify-between items-center">
+          {/* Delete icon */}
+          <div
+            className={`p-4 hover:text-red-500 ${deleteControlsStyle}`}
+            onClick={async (e) => {
+              e.stopPropagation();
+              await handleCardDelete();
+            }}
+          >
+            <PiTrash size="1.4rem" />
+          </div>
+          {/* Time info bar */}
+          <div className={`text-sm text-slate-600 ${infoBarStyle}`}>
+            {moment.duration(cardData.currentInterval, "seconds").humanize()}
+          </div>
+          {/* Edit/view icon */}
+          <div
+            className={`p-4 hover:text-yellow-500 ${editControlsStyle}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (mode === "view") setMode("edit");
+              else setMode("view");
+            }}
+          >
+            {mode === "view" ? (
+              <PiNotePencilFill size="1.4rem" />
+            ) : (
+              <PiEyeBold size="1.4rem" />
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -38,7 +38,11 @@ export default function DeckStudy() {
         <>
           <DeckInfoHeader deckData={deckData} />
           <section className="flex justify-center items-center mt-8 mb-8">
-            <Card cardData={cardList[0]} />
+            <Card
+              cardData={cardList[0]}
+              deleteControls={false}
+              infoBar={false}
+            />
           </section>
           {/* Card control buttons */}
           <section className="flex gap-3 justify-center items-end">
