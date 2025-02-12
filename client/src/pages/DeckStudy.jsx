@@ -16,7 +16,7 @@ export default function DeckStudy() {
 
   async function fetchDeckData() {
     const result = await api("post", "/card/list", {
-      deckGuid: params?.suid,
+      deckGuid: params?.guid,
       isDue: true,
     });
     setDeckData(result?.data);

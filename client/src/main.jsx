@@ -5,6 +5,7 @@ import "./index.css";
 import Home from "./pages/Home.jsx";
 import DeckIndex from "./pages/DeckIndex.jsx";
 import DeckStudy from "./pages/DeckStudy.jsx";
+import DeckEdit from "./pages/DeckEdit.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import AuthProvider from "./contexts/AuthProvider.jsx";
@@ -18,7 +19,9 @@ ReactDOM.createRoot(root).render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/decks" element={<DeckIndex />} />
-          <Route path="/study/:suid/:name" element={<DeckStudy />} />
+          <Route path="/study/:guid/:name" element={<DeckStudy />} />
+          <Route path="/study/:guid" element={<DeckStudy />} />
+          <Route path="/edit/:guid/" element={<DeckEdit />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
