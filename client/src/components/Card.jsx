@@ -59,48 +59,46 @@ export default function Card({ cardData, editable = false }) {
   }
 
   return (
-    <>
+    <div
+      className="flex justify-center items-center shadow-xl rounded-lg"
+      onClick={() => {
+        // Switching card side
+        if (cardSide === "front") setCardSide("back");
+        else setCardSide("front");
+      }}
+    >
       <div
-        className="flex justify-center items-center shadow-xl"
-        onClick={() => {
-          // Switching card side
-          if (cardSide === "front") setCardSide("back");
-          else setCardSide("front");
-        }}
+        className={`flex relative justify-center items-center font-semibold w-96 min-h-96 p-4 text-2xl text-center rounded-lg ${sideStyle}`}
       >
+        {/* Card content */}
+        <div className="w-full">
+          <textarea
+            ref={textBox}
+            readOnly={!isEditable}
+            disabled={!isEditable}
+            className={`overflow-auto resize-none w-full px-2 py-2 ${textAlign} ${editableStyle}`}
+            value={cardContent}
+            placeholder="Empty card"
+            onClick={(e) => e.stopPropagation()}
+            onChange={() => handleInputChange()}
+            onBlur={async () => await handleInputSubmit()}
+          />
+        </div>
+        {/* Edit/view icon */}
         <div
-          className={`flex relative justify-center items-center font-semibold w-96 min-h-96 p-4 text-2xl text-center ${sideStyle}`}
+          className="absolute top-0 right-0 p-4 hover:text-yellow-500"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsEditable(!isEditable);
+          }}
         >
-          {/* Card content */}
-          <div className="w-full">
-            <textarea
-              ref={textBox}
-              readOnly={!isEditable}
-              disabled={!isEditable}
-              className={`overflow-auto resize-none w-full px-2 py-2 ${textAlign} ${editableStyle}`}
-              value={cardContent}
-              placeholder="Empty card"
-              onClick={(e) => e.stopPropagation()}
-              onChange={() => handleInputChange()}
-              onBlur={async () => await handleInputSubmit()}
-            />
-          </div>
-          {/* Edit/view icon */}
-          <div
-            className="absolute top-0 right-0 p-4 hover:text-yellow-500"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsEditable(!isEditable);
-            }}
-          >
-            {!isEditable ? (
-              <PiNotePencilFill size="1.4rem" />
-            ) : (
-              <PiEyeBold size="1.4rem" />
-            )}
-          </div>
+          {!isEditable ? (
+            <PiNotePencilFill size="1.4rem" />
+          ) : (
+            <PiEyeBold size="1.4rem" />
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }

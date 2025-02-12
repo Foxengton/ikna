@@ -19,8 +19,8 @@ export default async function addCardContoller(req, res) {
   const tokenUsername = jwtVerify(token)?.username;
   const deckGuid = req?.deckGuid;
   const deckId = req?.deckId ?? (await guidToId(deckGuid, "decks"));
-  const cardFront = req?.cardFront;
-  const cardBack = req?.cardBack;
+  const cardFront = req?.cardFront ?? "";
+  const cardBack = req?.cardBack ?? "";
   // Checking token
   if (!tokenUsername) {
     res.status(401).send("Access unauthorized");
