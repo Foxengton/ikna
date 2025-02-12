@@ -36,7 +36,6 @@ export default function DeckStudy() {
           <DeckInfoHeader deckData={deckData} />
           <section className="flex justify-center items-center mt-8 mb-8">
             <Card
-              key={cardList[0].guid}
               cardData={cardList[0]}
               deleteControls={false}
               infoBar={false}
