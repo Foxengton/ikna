@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import { useRef } from "react";
 import api from "../services/api.jsx";
 import moment from "moment";
 
@@ -11,6 +9,7 @@ import {
   PiGraduationCapFill,
   PiTimerBold,
 } from "react-icons/pi";
+import SyncInput from "./SyncInput.jsx";
 
 export default function Card({
   cardData,
@@ -37,10 +36,6 @@ export default function Card({
     cardSide === "front"
       ? [frontContent, setFrontContent]
       : [backContent, setBackContent];
-  const textBox = useRef(null);
-  const [unsavedFlag, setUnsavedFlag] = useState(false);
-  const [lineCount, setLineCount] = useState(0);
-  const textAlign = lineCount <= 1 ? "text-center" : "text-start";
   const [mode, setMode] = useState(defaultMode);
   const modeStyle =
     mode === "edit"
@@ -48,42 +43,10 @@ export default function Card({
           cardSide === "front" ? "bg-slate-100" : "bg-slate-600"
         }`
       : null;
-  const placeHolder = cardSide === "front" ? "Empty front" : "Empty back";
   const editControlsStyle = editControls ? "visible" : "invisible";
   const deleteControlsStyle = deleteControls ? "visible" : "invisible";
   const infoBarStyle = infoBar ? "visible" : "invisible";
   const infoBarDueStyle = isDue ? "text-red-400" : null;
-
-  // Auto growth/shrinking of the textbox
-  useEffect(() => {
-    const box = textBox.current;
-    box.style.height = "0px";
-    box.style.height = box.scrollHeight + "px";
-    const boxStyle = window.getComputedStyle(box);
-    // Counting actual lines in the textbox
-    setLineCount(
-      Math.round(parseInt(boxStyle.height) / parseInt(boxStyle.lineHeight) - 1)
-    );
-  }, [cardContent]);
-
-  function handleInputChange() {
-    const box = textBox.current;
-    setUnsavedFlag(box.value != cardContent);
-    setCardContent(box.value);
-  }
-
-  async function handleInputSubmit() {
-    if (!unsavedFlag) return;
-    const box = textBox.current;
-    const data = {
-      cardGuid: cardData.guid,
-      cardFront: frontContent,
-      cardBack: backContent,
-    };
-    const result = await api("patch", "/card/update", data);
-    console.log("CARD UPDATED:", data);
-    setUnsavedFlag(false);
-  }
 
   async function handleCardDelete() {
     const data = { cardGuid: cardData.guid };
@@ -106,19 +69,17 @@ export default function Card({
         className={`flex relative justify-center items-center font-semibold w-96 min-h-96 p-4 text-2xl text-center rounded-lg ${sideStyle}`}
       >
         {/* Card content */}
-        <div className="w-full">
-          <textarea
-            ref={textBox}
-            readOnly={mode === "view"}
-            disabled={mode === "view"}
-            className={`overflow-auto resize-none w-full px-2 py-2 ${textAlign} ${modeStyle}`}
-            value={cardContent}
-            placeholder={placeHolder}
-            onClick={(e) => e.stopPropagation()}
-            onChange={() => handleInputChange()}
-            onBlur={async () => await handleInputSubmit()}
-          />
-        </div>
+        <SyncInput
+          key={cardData.guid + cardSide + mode}
+          method="patch"
+          url="card/update"
+          apiData={{ cardGuid: cardData.guid }}
+          state={() => [cardContent, setCardContent]}
+          className={`w-full ${modeStyle}`}
+          placeholder={cardSide === "front" ? "Empty front" : "Empty back"}
+          fieldName={cardSide === "front" ? "cardFront" : "cardBack"}
+          isEditable={mode === "edit"}
+        />
         {/* Controls */}
         <div className="absolute top-0 right-0 w-full flex flex-row justify-between items-center">
           {/* Delete icon */}
