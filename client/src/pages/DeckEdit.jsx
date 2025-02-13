@@ -36,7 +36,7 @@ export default function DeckEdit() {
   return (
     <PageWrapper>
       {/* Decks list */}
-      <DeckInfoHeader deckData={deckData} />
+      <DeckInfoHeader deckData={deckData} isEditable={true} />
       <section className="flex flex-col justify-center items-center rounded-md mb-32">
         <div className="grid grid-cols-4 gap-4 mt-8">
           {/* Card grid */}

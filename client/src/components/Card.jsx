@@ -75,7 +75,7 @@ export default function Card({
           url="card/update"
           apiData={{ cardGuid: cardData.guid }}
           state={() => [cardContent, setCardContent]}
-          className={`w-full ${modeStyle}`}
+          className={`w-full px-2 py-2 ${modeStyle}`}
           placeholder={cardSide === "front" ? "Empty front" : "Empty back"}
           fieldName={cardSide === "front" ? "cardFront" : "cardBack"}
           isEditable={mode === "edit"}

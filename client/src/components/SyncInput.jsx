@@ -50,7 +50,7 @@ export default function SyncInput({
       ref={textBox}
       readOnly={!isEditable}
       disabled={!isEditable}
-      className={`overflow-auto resize-none w-full px-2 py-2 ${textAlign} ${className}`}
+      className={`overflow-auto resize-none ${textAlign} ${className}`}
       value={value}
       placeholder={placeholder}
       onClick={(e) => e.stopPropagation()}
