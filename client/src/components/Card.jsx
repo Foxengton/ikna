@@ -4,7 +4,13 @@ import { useRef } from "react";
 import api from "../services/api.jsx";
 import moment from "moment";
 
-import { PiNotePencilFill, PiTrash, PiEyeBold } from "react-icons/pi";
+import {
+  PiNotePencilFill,
+  PiTrash,
+  PiEyeBold,
+  PiGraduationCapFill,
+  PiTimerBold,
+} from "react-icons/pi";
 
 export default function Card({
   cardData,
@@ -18,6 +24,10 @@ export default function Card({
 }) {
   if (defaultMode !== "view" && defaultMode !== "edit") defaultMode = "view";
   if (defaultSide !== "front" && defaultSide !== "back") defaultSide = "front";
+  const isDue = moment().format("X") - cardData.nextReview >= 0;
+  let nextReviewText = isDue
+    ? "now"
+    : moment.unix(cardData.nextReview).fromNow();
   const [cardSide, setCardSide] = useState(defaultSide);
   const sideStyle =
     cardSide === "front" ? "bg-white text-black" : "bg-slate-700 text-white";
@@ -42,6 +52,7 @@ export default function Card({
   const editControlsStyle = editControls ? "visible" : "invisible";
   const deleteControlsStyle = deleteControls ? "visible" : "invisible";
   const infoBarStyle = infoBar ? "visible" : "invisible";
+  const infoBarDueStyle = isDue ? "text-red-400" : null;
 
   // Auto growth/shrinking of the textbox
   useEffect(() => {
@@ -121,8 +132,20 @@ export default function Card({
             <PiTrash size="1.4rem" />
           </div>
           {/* Time info bar */}
-          <div className={`text-sm text-slate-600 ${infoBarStyle}`}>
-            {moment.duration(cardData.currentInterval, "seconds").humanize()}
+          <div className={`text-sm ${infoBarStyle}`}>
+            {cardData.status === "GRADUATED" ? (
+              <div className="flex flex-row gap-1 text-violet-500">
+                <PiGraduationCapFill size="1.2rem" />
+                <span>Graduated</span>
+              </div>
+            ) : (
+              <div
+                className={`flex flex-row gap-1 text-gray-400 ${infoBarDueStyle}`}
+              >
+                <PiTimerBold size="1.2rem" />
+                <span>{nextReviewText}</span>
+              </div>
+            )}
           </div>
           {/* Edit/view icon */}
           <div
