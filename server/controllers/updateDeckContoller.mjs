@@ -6,7 +6,7 @@ import getToken from "../services/getToken.mjs";
 export default async function updateDeckContoller(req, res) {
   /*
     ======= Update deck =======
-    Expected object: {s
+    Expected object: {
       deckId: deckId // deckGuid: deckGuid,
       deckName: deckName (optional)
     }

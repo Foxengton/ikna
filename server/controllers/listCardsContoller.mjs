@@ -121,5 +121,6 @@ export default async function listCardsContoller(req, res) {
   result.cardCountDue = infoResult.cardCountDue;
   result.cardCountReviewed = infoResult.cardCountReviewed;
   result.cardCountGraduated = infoResult.cardCountGraduated;
+  result.guid = infoResult.guid;
   res.status(200).send(result);
 }
