@@ -20,8 +20,8 @@ export default function Card({
   infoBar = true,
   side = "front",
   mode = "view",
-  modeHook = () => null,
-  contentHook = () => null,
+  modeHook = usestate,
+  contentHook = useState,
 }) {
   if (mode !== "view" && mode !== "edit") mode = "view";
   if (side !== "front" && side !== "back") side = "front";
@@ -29,9 +29,9 @@ export default function Card({
   let nextReviewText = isDue
     ? "now"
     : moment.unix(cardData.nextReview).fromNow();
-  const [cardContent, setCardContent] =
-    contentHook(side === "front" ? cardData.cardFront : cardData.cardBack) ??
-    useState(side === "front" ? cardData.cardFront : cardData.cardBack);
+  const [cardContent, setCardContent] = contentHook(
+    side === "front" ? cardData.cardFront : cardData.cardBack
+  );
   const [cardMode, setCardMode] = modeHook(mode) ?? useState(mode);
   const modeStyle =
     cardMode === "edit"
@@ -64,7 +64,7 @@ export default function Card({
           method="patch"
           url="card/update"
           apiData={{ cardGuid: cardData.guid }}
-          state={() => [cardContent, setCardContent]}
+          valueHook={() => [cardContent, setCardContent]}
           className={`w-full px-2 py-2 ${modeStyle}`}
           placeholder={side === "front" ? "Empty front" : "Empty back"}
           fieldName={side === "front" ? "cardFront" : "cardBack"}

@@ -25,3 +25,6 @@ dist-ssr
 
 # Sensative files
 config.json
+
+# Test files
+Test.jsx

@@ -10,18 +10,19 @@ export default function FlippableCard({
   infoBar = true,
   side = "front",
   mode = "view",
+  flipHook = useState,
 }) {
   if (mode !== "view" && mode !== "edit") mode = "view";
   if (side !== "front" && side !== "back") side = "front";
   const [commonMode, setCommonMode] = useState(mode);
-  const [isFlipped, setIsFlipped] = useState(side === "back");
+  const [isFlipped, setIsFlipped] = flipHook(side === "back");
 
   function handleFlip() {
     setIsFlipped(!isFlipped);
   }
 
   return (
-    <div className="relative">
+    <div className="relative w-min">
       <motion.div
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         initial={false}

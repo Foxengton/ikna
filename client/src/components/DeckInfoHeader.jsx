@@ -17,7 +17,7 @@ export default function DeckInfoHeader({ deckData, isEditable = false }) {
       <SyncInput
         placeholder="Deck name"
         fieldName="deckName"
-        state={() => useState(deckData.deckName)}
+        valueHook={() => useState(deckData.deckName)}
         method="patch"
         url="deck/update"
         apiData={{ deckGuid: deckData.guid }}

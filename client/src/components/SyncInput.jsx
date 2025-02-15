@@ -8,7 +8,7 @@ export default function SyncInput({
   url,
   apiData, // Additional object with relavent request data
   fieldName,
-  state = () => useState(),
+  valueHook = useState,
   placeholder,
   isEditable = true,
 }) {
@@ -16,7 +16,7 @@ export default function SyncInput({
   const [lineCount, setLineCount] = useState(0);
   const textAlign = lineCount <= 1 ? "text-center" : "text-start";
   const textBox = useRef(null);
-  const [value, setValue] = state();
+  const [value, setValue] = valueHook();
 
   // Auto growth/shrinking of the textbox
   useEffect(() => {
