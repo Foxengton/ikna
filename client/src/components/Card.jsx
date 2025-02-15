@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../services/api.jsx";
 import moment from "moment";
+import { motion } from "motion/react";
 
 import {
   PiNotePencilFill,
@@ -17,32 +18,29 @@ export default function Card({
   editControls = true,
   deleteControls = true,
   infoBar = true,
-  flipControls = true,
-  defaultSide = "front",
-  defaultMode = "view",
+  side = "front",
+  mode = "view",
+  modeHook = () => null,
+  contentHook = () => null,
 }) {
-  if (defaultMode !== "view" && defaultMode !== "edit") defaultMode = "view";
-  if (defaultSide !== "front" && defaultSide !== "back") defaultSide = "front";
+  if (mode !== "view" && mode !== "edit") mode = "view";
+  if (side !== "front" && side !== "back") side = "front";
   const isDue = moment().format("X") - cardData.nextReview >= 0;
   let nextReviewText = isDue
     ? "now"
     : moment.unix(cardData.nextReview).fromNow();
-  const [cardSide, setCardSide] = useState(defaultSide);
-  const sideStyle =
-    cardSide === "front" ? "bg-white text-black" : "bg-slate-700 text-white";
-  const [frontContent, setFrontContent] = useState(cardData.cardFront);
-  const [backContent, setBackContent] = useState(cardData.cardBack);
   const [cardContent, setCardContent] =
-    cardSide === "front"
-      ? [frontContent, setFrontContent]
-      : [backContent, setBackContent];
-  const [mode, setMode] = useState(defaultMode);
+    contentHook(side === "front" ? cardData.cardFront : cardData.cardBack) ??
+    useState(side === "front" ? cardData.cardFront : cardData.cardBack);
+  const [cardMode, setCardMode] = modeHook(mode) ?? useState(mode);
   const modeStyle =
-    mode === "edit"
+    cardMode === "edit"
       ? `shadow-inner rounded ${
-          cardSide === "front" ? "bg-slate-100" : "bg-slate-600"
+          side === "front" ? "bg-slate-100" : "bg-slate-600"
         }`
       : null;
+  const sideStyle =
+    side === "front" ? "bg-white text-black" : "bg-slate-700 text-white";
   const editControlsStyle = editControls ? "visible" : "invisible";
   const deleteControlsStyle = deleteControls ? "visible" : "invisible";
   const infoBarStyle = infoBar ? "visible" : "invisible";
@@ -56,29 +54,21 @@ export default function Card({
   }
 
   return (
-    <div
-      className="flex justify-center items-center shadow-xl rounded-lg"
-      onClick={() => {
-        // Switching card side
-        if (!flipControls) return;
-        if (cardSide === "front") setCardSide("back");
-        else setCardSide("front");
-      }}
-    >
+    <div className="flex justify-center items-center shadow-xl rounded-lg">
       <div
         className={`flex relative justify-center items-center font-semibold w-96 min-h-96 p-4 text-2xl text-center rounded-lg ${sideStyle}`}
       >
         {/* Card content */}
         <SyncInput
-          key={cardData.guid + cardSide + mode}
+          key={cardData.guid + side + cardMode}
           method="patch"
           url="card/update"
           apiData={{ cardGuid: cardData.guid }}
           state={() => [cardContent, setCardContent]}
           className={`w-full px-2 py-2 ${modeStyle}`}
-          placeholder={cardSide === "front" ? "Empty front" : "Empty back"}
-          fieldName={cardSide === "front" ? "cardFront" : "cardBack"}
-          isEditable={mode === "edit"}
+          placeholder={side === "front" ? "Empty front" : "Empty back"}
+          fieldName={side === "front" ? "cardFront" : "cardBack"}
+          isEditable={cardMode === "edit"}
         />
         {/* Controls */}
         <div className="absolute top-0 right-0 w-full flex flex-row justify-between items-center">
@@ -113,11 +103,11 @@ export default function Card({
             className={`p-4 hover:text-yellow-500 ${editControlsStyle}`}
             onClick={(e) => {
               e.stopPropagation();
-              if (mode === "view") setMode("edit");
-              else setMode("view");
+              if (cardMode === "view") setCardMode("edit");
+              else setCardMode("view");
             }}
           >
-            {mode === "view" ? (
+            {cardMode === "view" ? (
               <PiNotePencilFill size="1.4rem" />
             ) : (
               <PiEyeBold size="1.4rem" />
