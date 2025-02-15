@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Button from "../components/Button.jsx";
 import api from "../services/api.jsx";
 import DeckInfoHeader from "../components/DeckInfoHeader.jsx";
-import Card from "../components/Card.jsx";
+import FlippableCard from "../components/FlippableCard.jsx";
 import moment from "moment";
 import VerdictButton from "../components/VerdictButton.jsx";
 
@@ -35,11 +35,12 @@ export default function DeckStudy() {
         <>
           <DeckInfoHeader deckData={deckData} />
           <section className="flex justify-center items-center mt-8 mb-8">
-            <Card
+            <FlippableCard
               key={cardList[0].guid}
               cardData={cardList[0]}
               deleteControls={false}
               infoBar={false}
+              side="front"
             />
           </section>
           {/* Card control buttons */}

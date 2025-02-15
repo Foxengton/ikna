@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import api from "../services/api.jsx";
 import { useState } from "react";
 import DeckInfoHeader from "../components/DeckInfoHeader.jsx";
-import Card from "../components/Card.jsx";
+import FlippableCard from "../components/FlippableCard.jsx";
 import Button from "../components/Button.jsx";
 
 import { PiPlusCircleFill } from "react-icons/pi";
@@ -41,12 +41,13 @@ export default function DeckEdit() {
         <div className="grid grid-cols-4 gap-4 mt-8">
           {/* Card grid */}
           {cardList.map((card) => (
-            <Card
+            <FlippableCard
               cardData={card}
               key={card.guid}
-              updateFunction={async () => fetchDeckData()}
-              defaultMode="edit"
-              editControls={false}
+              updateFunction={() => fetchDeckData()}
+              mode="view"
+              editControls={true}
+              side="front"
             />
           ))}
         </div>
