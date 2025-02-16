@@ -1,5 +1,7 @@
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
 
+![](/readme/demo.gif)
+
 **Ikna** is an learning web application based on flashcards and [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetition), akin to [Anki](https://apps.ankiweb.net/). It provides a modern web interface with a self-hosting server to create and review cards for learning languages, preparing for exams, or anything else that requires memorizing and long-term retention.
 
 ## Prerequisites
