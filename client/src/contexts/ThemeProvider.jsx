@@ -13,7 +13,7 @@ export default function ThemeProvider({ children }) {
         base: "bg-neutral-900 text-white",
         inputEdit: "bg-neutral-600",
       },
-      size: "w-64 min-h-64",
+      size: "w-80 min-h-80",
     },
   };
   const [theme, setTheme] = useState(defaultTheme);
