@@ -45,9 +45,7 @@ export default function DeckEdit() {
               cardData={card}
               key={card.guid}
               updateFunction={() => fetchDeckData()}
-              mode="view"
               editControls={true}
-              side="front"
             />
           ))}
         </div>

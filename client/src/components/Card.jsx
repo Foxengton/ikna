@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import api from "../services/api.jsx";
 import moment from "moment";
-import { motion } from "motion/react";
-
+import { ThemeContext } from "../contexts/ThemeProvider.jsx";
+import SyncInput from "./SyncInput.jsx";
 import {
   PiNotePencilFill,
   PiTrash,
@@ -10,7 +10,6 @@ import {
   PiGraduationCapFill,
   PiTimerBold,
 } from "react-icons/pi";
-import SyncInput from "./SyncInput.jsx";
 
 export default function Card({
   cardData,
@@ -20,11 +19,12 @@ export default function Card({
   infoBar = true,
   side = "front",
   mode = "view",
-  modeHook = usestate,
+  modeHook = useState,
   contentHook = useState,
 }) {
   if (mode !== "view" && mode !== "edit") mode = "view";
   if (side !== "front" && side !== "back") side = "front";
+  const [theme, setTheme] = useContext(ThemeContext);
   const isDue = moment().format("X") - cardData.nextReview >= 0;
   let nextReviewText = isDue
     ? "now"
@@ -33,18 +33,11 @@ export default function Card({
     side === "front" ? cardData.cardFront : cardData.cardBack
   );
   const [cardMode, setCardMode] = modeHook(mode) ?? useState(mode);
-  const modeStyle =
-    cardMode === "edit"
-      ? `shadow-inner rounded ${
-          side === "front" ? "bg-slate-100" : "bg-slate-600"
-        }`
-      : null;
-  const sideStyle =
-    side === "front" ? "bg-white text-black" : "bg-slate-700 text-white";
   const editControlsStyle = editControls ? "visible" : "invisible";
   const deleteControlsStyle = deleteControls ? "visible" : "invisible";
   const infoBarStyle = infoBar ? "visible" : "invisible";
   const infoBarDueStyle = isDue ? "text-red-400" : null;
+  const inputStyle = mode === "edit" ? theme.card[side].inputEdit : null;
 
   async function handleCardDelete() {
     const data = { cardGuid: cardData.guid };
@@ -56,16 +49,16 @@ export default function Card({
   return (
     <div className="flex justify-center items-center shadow-xl rounded-lg">
       <div
-        className={`flex relative justify-center items-center font-semibold w-96 min-h-96 p-4 text-2xl text-center rounded-lg ${sideStyle}`}
+        className={`flex relative justify-center items-center font-semibold p-4 text-2xl text-center rounded-lg ${theme.card[side].base} ${theme.card.size}`}
       >
         {/* Card content */}
         <SyncInput
           key={cardData.guid + side + cardMode}
+          className={inputStyle}
           method="patch"
           url="card/update"
           apiData={{ cardGuid: cardData.guid }}
           valueHook={() => [cardContent, setCardContent]}
-          className={`w-full px-2 py-2 ${modeStyle}`}
           placeholder={side === "front" ? "Empty front" : "Empty back"}
           fieldName={side === "front" ? "cardFront" : "cardBack"}
           isEditable={cardMode === "edit"}
@@ -91,7 +84,7 @@ export default function Card({
               </div>
             ) : (
               <div
-                className={`flex flex-row gap-1 text-gray-400 ${infoBarDueStyle}`}
+                className={`flex flex-row gap-1 text-neutral-400 ${infoBarDueStyle}`}
               >
                 <PiTimerBold size="1.2rem" />
                 <span>{nextReviewText}</span>
