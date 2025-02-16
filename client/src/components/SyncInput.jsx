@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import api from "../services/api";
+import TextareaAutosize from "react-textarea-autosize";
 
 // Textarea with automatic change detection and submission
 export default function SyncInput({
@@ -18,18 +19,6 @@ export default function SyncInput({
   const textBox = useRef(null);
   const [value, setValue] = valueHook();
 
-  // Auto growth/shrinking of the textbox
-  useEffect(() => {
-    const box = textBox.current;
-    box.style.height = "0px";
-    box.style.height = box.scrollHeight + "px";
-    const boxStyle = window.getComputedStyle(box);
-    // Counting actual lines in the textbox
-    setLineCount(
-      Math.round(parseInt(boxStyle.height) / parseInt(boxStyle.lineHeight) - 1)
-    );
-  }, [value]);
-
   function handleInputChange() {
     const box = textBox.current;
     setUnsavedFlag(box.value != value);
@@ -45,16 +34,25 @@ export default function SyncInput({
     setUnsavedFlag(false);
   }
 
+  function handleHeightChange() {
+    const box = textBox.current;
+    const boxStyle = window.getComputedStyle(box);
+    setLineCount(
+      Math.round(parseInt(boxStyle.height) / parseInt(boxStyle.lineHeight))
+    );
+  }
+
   return (
-    <textarea
+    <TextareaAutosize
       ref={textBox}
       readOnly={!isEditable}
       disabled={!isEditable}
-      className={`overflow-auto resize-none ${textAlign} ${className}`}
+      className={`overflow-auto resize-none box-content ${textAlign} ${className}`}
       value={value}
       placeholder={placeholder}
       onClick={(e) => e.stopPropagation()}
       onChange={() => handleInputChange()}
+      onHeightChange={() => handleHeightChange()}
       onBlur={async () => await handleInputSubmit()}
     />
   );
