@@ -31,7 +31,7 @@ Now you should be able to access the web interface by `http://localhost:5173/`.
 
 ## Configuration
 
-> [!IMPORTANT] Example configs
+> [!IMPORTANT]
 > There are two `config.EXAMPLE.json` files in `/client` and `/server` folders accordingly. Make sure to rename both files to `config.json`.
 
 ### Client config
