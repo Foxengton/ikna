@@ -11,7 +11,7 @@ export default function ThemeProvider({ children }) {
       },
       back: {
         base: "bg-neutral-900 text-white",
-        inputEdit: "bg-neutral-600",
+        inputEdit: "bg-neutral-800",
       },
       size: "w-80 min-h-80",
     },

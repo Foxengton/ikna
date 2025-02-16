@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 
 export default function DeckInfoHeader({ deckData, isEditable = false }) {
-  const editStyle = isEditable ? "bg-slate-100 shadow-inner rounded" : "";
+  const editStyle = isEditable ? "bg-slate-100 rounded" : "";
 
   return (
     <header className="flex flex-row gap-8 justify-center items-center bg-slate-300 py-2">

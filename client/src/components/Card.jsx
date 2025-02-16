@@ -37,7 +37,7 @@ export default function Card({
   const deleteControlsStyle = deleteControls ? "visible" : "invisible";
   const infoBarStyle = infoBar ? "visible" : "invisible";
   const infoBarDueStyle = isDue ? "text-red-400" : null;
-  const inputStyle = mode === "edit" ? theme.card[side].inputEdit : null;
+  const inputStyle = cardMode === "edit" ? theme.card[side].inputEdit : null;
 
   async function handleCardDelete() {
     const data = { cardGuid: cardData.guid };
@@ -54,7 +54,7 @@ export default function Card({
         {/* Card content */}
         <SyncInput
           key={cardData.guid + side + cardMode}
-          className={inputStyle}
+          className={`w-full py-1 px-2 m-1 rounded ${inputStyle}`}
           method="patch"
           url="card/update"
           apiData={{ cardGuid: cardData.guid }}
