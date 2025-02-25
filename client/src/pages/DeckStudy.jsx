@@ -30,7 +30,7 @@ export default function DeckStudy() {
 
   if (!deckData) return <PageWrapper />;
   return (
-    <PageWrapper>
+    <PageWrapper authRedirect="/login">
       {cardList.length != 0 ? (
         <>
           <DeckInfoHeader deckData={deckData} />
