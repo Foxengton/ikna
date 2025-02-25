@@ -18,7 +18,10 @@ export default function NavigationBar() {
         <NavLink className="px-6 font-semibold" to="/decks">
           Decks
         </NavLink>
-        <NavLink className="px-6 font-semibold" to="/about">
+        <NavLink
+          className="px-6 font-semibold"
+          to="https://github.com/Xijiks/ikna"
+        >
           About
         </NavLink>
       </div>
