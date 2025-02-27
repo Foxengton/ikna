@@ -64,66 +64,69 @@ export default function DeckIndex() {
     navigate("/edit/" + deck.guid);
   }
 
-  if (!deckList) return <PageWrapper />;
   return (
     <PageWrapper authRedirect="/login">
       {/* Decks list */}
       {showContent ? (
         <section className="flex flex-col justify-center items-center rounded-md">
-          <div className="flex flex-col w-fit gap-2">
-            <table className="mt-16 bg-slate-50 shadow-lg p-2 rounded-md overflow-hidden">
-              <tbody>
-                <tr className="bg-slate-200">
-                  <td className="py-2 px-4 font-semibold">My decks</td>
-                  <td className="py-2 px-2 font-semibold">
-                    <PiTimerFill size="1.4rem" />
-                  </td>
-                  <td className="py-2 px-2 font-semibold">
-                    <PiHeadCircuitFill size="1.4rem" />
-                  </td>
-                  <td className="py-2 px-2 font-semibold">
-                    <PiGraduationCapFill size="1.4rem" />
-                  </td>
-                  <td className="py-2 px-2 font-semibold">
-                    <PiNoteFill size="1.4rem" />
-                  </td>
-                  <td />
-                  <td />
-                </tr>
-                {deckList.map((deck, index) => (
-                  <tr key={index} className="hover:bg-yellow-100">
-                    <td
-                      className="py-2 px-4 hover:bg-yellow-300"
-                      onClick={() => clickTitleHandle(deck)}
-                    >
-                      {deck.deckName}
+          <div className="flex flex-col w-fit gap-2 pt-16">
+            {deckList ? (
+              <table className="bg-slate-50 shadow-lg p-2 rounded-md overflow-hidden">
+                <tbody>
+                  <tr className="bg-slate-200">
+                    <td className="py-2 px-4 font-semibold">My decks</td>
+                    <td className="py-2 px-2 font-semibold">
+                      <PiTimerFill size="1.4rem" />
                     </td>
-                    <td className="py-2 px-2 text-center">
-                      {deck.cardCountDue}
+                    <td className="py-2 px-2 font-semibold">
+                      <PiHeadCircuitFill size="1.4rem" />
                     </td>
-                    <td className="py-2 px-2 text-center">
-                      {deck.cardCountReviewed}
+                    <td className="py-2 px-2 font-semibold">
+                      <PiGraduationCapFill size="1.4rem" />
                     </td>
-                    <td className="py-2 px-2 text-center">
-                      {deck.cardCountGraduated}
+                    <td className="py-2 px-2 font-semibold">
+                      <PiNoteFill size="1.4rem" />
                     </td>
-                    <td className="py-2 px-2 text-center">{deck.cardCount}</td>
-                    <td
-                      className="py-2 px-2 text-center hover:bg-yellow-300"
-                      onClick={() => editDeckHandle(deck)}
-                    >
-                      <PiNotePencilFill size="1.4rem" />
-                    </td>
-                    <td
-                      className="py-2 px-2 text-center hover:bg-yellow-300"
-                      onClick={async () => await deleteDeckHandle(deck)}
-                    >
-                      <PiTrashFill size="1.4rem" />
-                    </td>
+                    <td />
+                    <td />
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                  {deckList.map((deck, index) => (
+                    <tr key={index} className="hover:bg-yellow-100">
+                      <td
+                        className="py-2 px-4 hover:bg-yellow-300"
+                        onClick={() => clickTitleHandle(deck)}
+                      >
+                        {deck.deckName}
+                      </td>
+                      <td className="py-2 px-2 text-center">
+                        {deck.cardCountDue}
+                      </td>
+                      <td className="py-2 px-2 text-center">
+                        {deck.cardCountReviewed}
+                      </td>
+                      <td className="py-2 px-2 text-center">
+                        {deck.cardCountGraduated}
+                      </td>
+                      <td className="py-2 px-2 text-center">
+                        {deck.cardCount}
+                      </td>
+                      <td
+                        className="py-2 px-2 text-center hover:bg-yellow-300"
+                        onClick={() => editDeckHandle(deck)}
+                      >
+                        <PiNotePencilFill size="1.4rem" />
+                      </td>
+                      <td
+                        className="py-2 px-2 text-center hover:bg-yellow-300"
+                        onClick={async () => await deleteDeckHandle(deck)}
+                      >
+                        <PiTrashFill size="1.4rem" />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : null}
             {/* New deck button */}
             <Button
               className="bg-yellow-300"
