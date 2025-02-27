@@ -6,7 +6,7 @@
     "password": "",
     "name": "ikna",
     "schemaLocation": "./schema.sql",
-    "alwaysNewDB": false
+    "tableCleanup": false
   },
   "secretKeySize": 128,
   "jwtExpirationTime": "1d"

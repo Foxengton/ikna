@@ -1,4 +1,4 @@
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Radix UI](https://img.shields.io/badge/radix%20ui-161618.svg?style=for-the-badge&logo=radix-ui&logoColor=white) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
 
 ![](/readme/demo.gif)
 
@@ -46,6 +46,6 @@ Now you should be able to access the web interface by `http://localhost:5173/`.
 - `db.password` — MySQL password for the chosen user. Empty by default.
 - `db.name` — MySQL database name. `ikna` by default.
 - `db.schemaLocation` — location of the file that contains the innitial database schema that will be applied on the first run. Changing this value is not recommended. `./schema.sql` by default.
-- `db.alwaysNewDB` **(testing only)** — when set `true`, the database will be dropped and recreated on every run. `false` by default.
+- `db.tableCleanup` **(testing only)** — when set `true`, the database tables will be truncated on every run. `false` by default.
 - `secretKeySize` — the number of random bytes that will be used to sign authentification tokens. Those bytes are saved as `secret.key` on the first run. `128` by default.
 - `jwtExpirationTime` - the time allowed for tokens to stay valid before expiring. `1d` by default.

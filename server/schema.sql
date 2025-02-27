@@ -1,14 +1,11 @@
-CREATE DATABASE ikna;
-USE ikna;
-
-CREATE TABLE users (
+CREATE TABLE iF NOT EXISTS users (
     id int PRIMARY KEY AUTO_INCREMENT,
 	username varchar(20),
   	password_hash char(100),
     password_salt char(44),
     settings text
 );
-CREATE TABLE cards (
+CREATE TABLE iF NOT EXISTS cards (
     id int PRIMARY KEY AUTO_INCREMENT,
     guid char(8),
     user_id int,
@@ -21,7 +18,7 @@ CREATE TABLE cards (
     status ENUM("LEARNING", "MEMORIZING", "GRADUATED"),
     learning_step tinyint
 );
-CREATE TABLE decks (
+CREATE TABLE iF NOT EXISTS decks (
     id int PRIMARY KEY AUTO_INCREMENT,
     guid char(8),
     user_id int,
