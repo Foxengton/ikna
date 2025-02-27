@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { NavLink } from "react-router";
 import Button from "../components/Button.jsx";
 import PageWrapper from "../components/PageWrapper.jsx";
 import api from "../services/api.jsx";
 import Cookie from "js-cookie";
 import { useNavigate } from "react-router";
+import { AuthContext } from "../contexts/AuthProvider.jsx";
 
 const usernameRegex = new RegExp("^[A-Za-z0-9_-]*$");
 const PASSWORD_MIN_LENGTH = 8;
@@ -16,6 +17,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [passwordErrors, setPasswordErrors] = useState([]);
   const navigate = useNavigate();
+  const [userData, setUserData] = useContext(AuthContext);
 
   // Check for username and password validity and update error labels
   function checkValidity() {
@@ -54,7 +56,7 @@ export default function RegisterPage() {
       password: password,
     });
     if (result?.data) {
-      Cookie.set("user-data", JSON.stringify(result.data));
+      setUserData(result?.data);
       navigate("/");
     }
   }
