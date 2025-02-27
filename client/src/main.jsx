@@ -11,6 +11,7 @@ import RegisterPage from "./pages/RegisterPage.jsx";
 import AuthProvider from "./contexts/AuthProvider.jsx";
 import ThemeProvider from "./contexts/ThemeProvider.jsx";
 import Test from "./pages/Test1.jsx";
+import Error404 from "./pages/Error404";
 
 const root = document.getElementById("root");
 
@@ -20,6 +21,7 @@ ReactDOM.createRoot(root).render(
       <ThemeProvider>
         <BrowserRouter>
           <Routes>
+            <Route path="/*" element={<Error404 />} />
             <Route path="/" element={<Home />} />
             <Route path="/decks" element={<DeckIndex />} />
             <Route path="/study/:guid/:name" element={<DeckStudy />} />
