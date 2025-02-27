@@ -11,7 +11,7 @@ export default function AuthProvider({ children }) {
 
   // Maintaining equality between state and cookie values
   useEffect(() => {
-    Cookies.set("user-data", JSON.stringify(userData));
+    Cookies.set("user-data", JSON.stringify(userData), { expires: 365 });
   }, [userData]);
 
   return (

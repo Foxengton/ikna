@@ -25,7 +25,7 @@ export default function DeckEdit() {
     console.log("result", result);
     setDeckData(result?.data);
     setCardList(result?.data?.data ?? []);
-    console.log("CARD LIST\n", cardList);
+    console.log("CARD LIST\n", result?.data?.data ?? []);
     // Unauthorized
     if (result) setShowContent(true);
     else navigate("/login");
