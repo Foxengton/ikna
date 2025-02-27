@@ -2,12 +2,13 @@ import { useContext } from "react";
 import { NavLink } from "react-router";
 import Button from "../components/Button.jsx";
 import { AuthContext } from "../contexts/AuthProvider.jsx";
+import NavigationUserControls from "./NavigationUserControls.jsx";
 
 export default function NavigationBar() {
   const [userData, setUserData] = useContext(AuthContext);
   const username = userData?.username;
   return (
-    <header className="bg-slate-50 h-16 drop-shadow-lg flex px-6 z-10">
+    <header className="bg-white h-16 drop-shadow-lg flex px-6 z-10">
       {/* Left bar corner */}
       <div className="flex-1"></div>
       {/* Navigation buttons */}
@@ -27,10 +28,13 @@ export default function NavigationBar() {
       </div>
       {/* Right bar corner */}
       <div className="flex flex-1 items-center flex-row-reverse gap-2">
-        {username ? `Welcome, ${username}!` : null}
-        <Button className="bg-yellow-300 font-semibold" to="/login">
-          Sign in
-        </Button>
+        {!username ? (
+          <Button className="bg-yellow-300 font-semibold" to="/login">
+            Sign in
+          </Button>
+        ) : (
+          <NavigationUserControls username={username} />
+        )}
       </div>
     </header>
   );

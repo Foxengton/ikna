@@ -1,8 +1,6 @@
 import axios from "axios";
 import config from "../config.json";
 import Cookies from "js-cookie";
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthProvider";
 
 export default async function api(method, url, data = null) {
   const token = JSON.parse(Cookies.get("user-data") ?? "null")?.token;
