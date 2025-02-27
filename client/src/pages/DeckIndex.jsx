@@ -65,7 +65,7 @@ export default function DeckIndex() {
   }
 
   return (
-    <PageWrapper authRedirect="/login">
+    <PageWrapper authRedirect="/login" title="Decks">
       {/* Decks list */}
       {showContent ? (
         <section className="flex flex-col justify-center items-center rounded-md">

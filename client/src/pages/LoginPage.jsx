@@ -27,7 +27,7 @@ export default function LoginPage() {
   }
 
   return (
-    <PageWrapper>
+    <PageWrapper title="Login">
       <div className="absolute h-screen w-screen">
         <div className="flex h-full justify-center items-center">
           <form className="flex flex-col p-4 bg-white rounded justify-center items-center shadow-xl w-72">

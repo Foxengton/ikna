@@ -3,7 +3,7 @@ import PageWrapper from "../components/PageWrapper.jsx";
 
 export default function Error404() {
   return (
-    <PageWrapper>
+    <PageWrapper title="Error 404">
       {/* Center logo */}
       <section className="flex flex-col justify-center items-center">
         <div className="text-8xl font-lexend mt-36 font-light">404</div>

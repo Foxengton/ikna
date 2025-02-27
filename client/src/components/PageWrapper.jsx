@@ -6,11 +6,20 @@ import { useNavigate } from "react-router";
 import NavigationBar from "../components/NavigationBar.jsx";
 import { AuthContext } from "../contexts/AuthProvider.jsx";
 
-export default function PageWrapper({ children, authRedirect = "" }) {
+export default function PageWrapper({
+  children,
+  authRedirect = "",
+  title = "Ikna",
+}) {
   const navigate = useNavigate();
   const [userData, setUserData] = useContext(AuthContext);
   const username = userData?.username;
   const [showContent, setShowContent] = useState(false);
+  if (!title) title = "Ikna";
+
+  useEffect(() => {
+    document.title = title;
+  }, []);
 
   useEffect(() => {
     if (authRedirect && !username) {

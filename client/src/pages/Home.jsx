@@ -2,7 +2,7 @@ import PageWrapper from "../components/PageWrapper.jsx";
 
 export default function Home() {
   return (
-    <PageWrapper>
+    <PageWrapper title="Ikna">
       {/* Center logo */}
       <section className="flex flex-col justify-center items-center">
         <div className="text-8xl font-lexend mt-36 font-light">IKNA</div>
