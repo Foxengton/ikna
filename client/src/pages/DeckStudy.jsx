@@ -31,7 +31,6 @@ export default function DeckStudy() {
   if (!deckData) return <PageWrapper />;
   return (
     <PageWrapper
-      authRedirect="/login"
       title={deckData?.deckName ?? "Decks"}
       key={`wrapper ${deckData?.deckName}`}
     >

@@ -2,6 +2,7 @@ import ReactDOM from "react-dom/client";
 import { StrictMode } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import "./index.css";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Home from "./pages/Home.jsx";
 import DeckIndex from "./pages/DeckIndex.jsx";
 import DeckStudy from "./pages/DeckStudy.jsx";
@@ -23,10 +24,12 @@ ReactDOM.createRoot(root).render(
           <Routes>
             <Route path="/*" element={<Error404 />} />
             <Route path="/" element={<Home />} />
-            <Route path="/decks" element={<DeckIndex />} />
-            <Route path="/study/:guid/:name" element={<DeckStudy />} />
-            <Route path="/study/:guid" element={<DeckStudy />} />
-            <Route path="/edit/:guid/" element={<DeckEdit />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/decks" element={<DeckIndex />} />
+              <Route path="/study/:guid/:name" element={<DeckStudy />} />
+              <Route path="/study/:guid" element={<DeckStudy />} />
+              <Route path="/edit/:guid/" element={<DeckEdit />} />
+            </Route>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/test" element={<Test />} />

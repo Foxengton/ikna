@@ -40,7 +40,6 @@ export default function DeckEdit() {
 
   return (
     <PageWrapper
-      authRedirect="/login"
       title={deckData?.deckName ?? "Decks"}
       key={`wrapper ${deckData?.deckName}`}
     >

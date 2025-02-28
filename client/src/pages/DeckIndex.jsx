@@ -1,5 +1,5 @@
 import PageWrapper from "../components/PageWrapper.jsx";
-import { useNavigate } from "react-router";
+import { replace, useNavigate } from "react-router";
 import { useEffect } from "react";
 import api from "../services/api.jsx";
 import { useContext } from "react";
@@ -32,7 +32,7 @@ export default function DeckIndex() {
     setDeckList(result?.data);
     console.log("DECK LIST\n", result?.data);
     if (result) setShowContent(true);
-    else navigate("/login");
+    else navigate("/login", { replace: true });
   }
 
   // Navigate to study page
@@ -65,7 +65,7 @@ export default function DeckIndex() {
   }
 
   return (
-    <PageWrapper authRedirect="/login" title="Decks">
+    <PageWrapper title="Decks">
       {/* Decks list */}
       {showContent ? (
         <section className="flex flex-col justify-center items-center rounded-md">
