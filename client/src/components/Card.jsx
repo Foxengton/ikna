@@ -33,10 +33,6 @@ export default function Card({
     side === "front" ? cardData.cardFront : cardData.cardBack
   );
   const [cardMode, setCardMode] = modeHook(mode) ?? useState(mode);
-  const editControlsStyle = editControls ? "visible" : "invisible";
-  const deleteControlsStyle = deleteControls ? "visible" : "invisible";
-  const infoBarStyle = infoBar ? "visible" : "invisible";
-  const infoBarDueStyle = isDue ? "text-red-400" : null;
   const inputStyle = cardMode === "edit" ? theme.card[side].inputEdit : null;
 
   async function handleCardDelete() {
@@ -64,48 +60,56 @@ export default function Card({
           isEditable={cardMode === "edit"}
         />
         {/* Controls */}
-        <div className="absolute top-0 right-0 w-full flex flex-row justify-between items-center">
+        <div className="absolute top-0 right-0 w-full grid grid-cols-[1fr_auto_1fr] items-center">
           {/* Delete icon */}
-          <div
-            className={`p-4 hover:text-red-500 ${deleteControlsStyle}`}
-            onClick={async (e) => {
-              e.stopPropagation();
-              await handleCardDelete();
-            }}
-          >
-            <PiTrash size="1.4rem" />
-          </div>
+          {deleteControls ? (
+            <button
+              className="p-4 w-min hover:text-red-500 justify-self-start"
+              onClick={async (e) => {
+                e.stopPropagation();
+                await handleCardDelete();
+              }}
+            >
+              <PiTrash size="1.4rem" />
+            </button>
+          ) : null}
           {/* Time info bar */}
-          <div className={`text-sm ${infoBarStyle}`}>
-            {cardData.status === "GRADUATED" ? (
-              <div className="flex flex-row gap-1 text-violet-500">
-                <PiGraduationCapFill size="1.2rem" />
-                <span>Graduated</span>
-              </div>
-            ) : (
-              <div
-                className={`flex flex-row gap-1 text-neutral-400 ${infoBarDueStyle}`}
-              >
-                <PiTimerBold size="1.2rem" />
-                <span>{nextReviewText}</span>
-              </div>
-            )}
-          </div>
+          {infoBar ? (
+            <div className="text-sm">
+              {cardData.status === "GRADUATED" ? (
+                <div className="flex flex-row gap-1 text-violet-500">
+                  <PiGraduationCapFill size="1.2rem" />
+                  <span>Graduated</span>
+                </div>
+              ) : (
+                <div
+                  className={`flex flex-row gap-1 ${
+                    isDue ? "text-red-400" : "text-neutral-400"
+                  }`}
+                >
+                  <PiTimerBold size="1.2rem" />
+                  <span>{nextReviewText}</span>
+                </div>
+              )}
+            </div>
+          ) : null}
           {/* Edit/view icon */}
-          <div
-            className={`p-4 hover:text-yellow-500 ${editControlsStyle}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (cardMode === "view") setCardMode("edit");
-              else setCardMode("view");
-            }}
-          >
-            {cardMode === "view" ? (
-              <PiNotePencilFill size="1.4rem" />
-            ) : (
-              <PiEyeBold size="1.4rem" />
-            )}
-          </div>
+          {editControls ? (
+            <button
+              className="p-4 w-min hover:text-yellow-500 justify-self-end"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (cardMode === "view") setCardMode("edit");
+                else setCardMode("view");
+              }}
+            >
+              {cardMode === "view" ? (
+                <PiNotePencilFill size="1.4rem" />
+              ) : (
+                <PiEyeBold size="1.4rem" />
+              )}
+            </button>
+          ) : null}
         </div>
       </div>
     </div>
