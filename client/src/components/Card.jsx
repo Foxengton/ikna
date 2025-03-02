@@ -64,7 +64,7 @@ export default function Card({
           {/* Delete icon */}
           {deleteControls ? (
             <button
-              className="p-4 w-min hover:text-red-500 justify-self-start"
+              className="p-4 w-min hover:text-red-500 justify-self-start col-start-1"
               onClick={async (e) => {
                 e.stopPropagation();
                 await handleCardDelete();
@@ -75,7 +75,7 @@ export default function Card({
           ) : null}
           {/* Time info bar */}
           {infoBar ? (
-            <div className="text-sm">
+            <div className="text-sm col-start-2">
               {cardData.status === "GRADUATED" ? (
                 <div className="flex flex-row gap-1 text-violet-500">
                   <PiGraduationCapFill size="1.2rem" />
@@ -96,7 +96,7 @@ export default function Card({
           {/* Edit/view icon */}
           {editControls ? (
             <button
-              className="p-4 w-min hover:text-yellow-500 justify-self-end"
+              className="p-4 w-min hover:text-yellow-500 justify-self-end col-start-3"
               onClick={(e) => {
                 e.stopPropagation();
                 if (cardMode === "view") setCardMode("edit");
