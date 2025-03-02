@@ -6,7 +6,6 @@ import { useState } from "react";
 import DeckInfoHeader from "../components/DeckInfoHeader.jsx";
 import FlippableCard from "../components/FlippableCard.jsx";
 import Button from "../components/Button.jsx";
-
 import { PiPlusCircleFill } from "react-icons/pi";
 
 export default function DeckEdit() {
@@ -62,9 +61,9 @@ export default function DeckEdit() {
             </div>
           </section>
           {/* New card button */}
-          <div className="fixed bottom-0 right-0 m-6 rounded-full overflow-hidden shadow-xl z-10">
+          <div className="fixed bottom-0 right-0 m-6  z-10">
             <Button
-              className="flex justify-center items-center bg-yellow-300"
+              className="flex justify-center items-center rounded-full bg-yellow-300 shadow-xl px-5 py-3"
               onClick={async () => await newCardHandle()}
             >
               <div className="flex items-center gap-3 p-2">

@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { NavLink } from "react-router";
-import Button from "../components/Button.jsx";
+import ButtonLink from "../components/ButtonLink.jsx";
 import { AuthContext } from "../contexts/AuthProvider.jsx";
 import NavigationUserControls from "./NavigationUserControls.jsx";
 
@@ -29,9 +29,12 @@ export default function NavigationBar() {
       {/* Right bar corner */}
       <div className="flex flex-1 items-center flex-row-reverse gap-2">
         {!username ? (
-          <Button className="bg-yellow-300 font-semibold" to="/login">
+          <ButtonLink
+            className="bg-yellow-300 font-semibold rounded-lg px-4 py-2"
+            to="/login"
+          >
             Sign in
-          </Button>
+          </ButtonLink>
         ) : (
           <NavigationUserControls username={username} />
         )}

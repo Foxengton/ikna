@@ -1,12 +1,13 @@
 import { Children } from "react";
+import { NavLink } from "react-router";
 
-export default function Button({ className, onClick, children }) {
+export default function ButtonLink({ className, to, children }) {
   return (
-    <button
+    <NavLink
       className={`flex justify-center items-center gap-2 whitespace-nowrap ${className}`}
-      onClick={onClick}
+      to={to}
     >
       {Children.toArray(children)}
-    </button>
+    </NavLink>
   );
 }

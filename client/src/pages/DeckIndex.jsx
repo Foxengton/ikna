@@ -71,7 +71,7 @@ export default function DeckIndex() {
         <section className="flex flex-col justify-center items-center rounded-md">
           <div className="flex flex-col w-fit gap-2 pt-16">
             {deckList ? (
-              <table className="bg-slate-50 shadow-lg p-2 rounded-md overflow-hidden">
+              <table className="bg-slate-50 shadow-lg p-2 rounded-lg overflow-hidden">
                 <tbody>
                   <tr className="bg-slate-200">
                     <td className="py-2 px-4 font-semibold">My decks</td>
@@ -129,13 +129,11 @@ export default function DeckIndex() {
             ) : null}
             {/* New deck button */}
             <Button
-              className="bg-yellow-300"
+              className="bg-yellow-300 px-4 py-2 rounded-lg font-semibold"
               onClick={async () => await addDeckHandle()}
             >
-              <div className="flex flex-row gap-2 justify-center items-center font-semibold">
-                <PiPlusCircleFill size="1.4rem" />
-                <span>New deck</span>
-              </div>
+              <PiPlusCircleFill size="1.4rem" />
+              New deck
             </Button>
           </div>
         </section>
