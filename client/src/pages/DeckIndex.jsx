@@ -1,5 +1,5 @@
 import PageWrapper from "../components/PageWrapper.jsx";
-import { replace, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import api from "../services/api.jsx";
 import { useContext } from "react";
@@ -15,6 +15,7 @@ import {
   PiPlusCircleFill,
 } from "react-icons/pi";
 import Button from "../components/Button.jsx";
+import ButtonLink from "../components/ButtonLink.jsx";
 
 export default function DeckIndex() {
   const navigate = useNavigate();
@@ -58,10 +59,6 @@ export default function DeckIndex() {
       deckGuid: deck.guid,
     });
     fetchDeckData();
-  }
-
-  function editDeckHandle(deck) {
-    navigate("/edit/" + deck.guid);
   }
 
   return (
@@ -110,17 +107,18 @@ export default function DeckIndex() {
                       <td className="py-2 px-2 text-center">
                         {deck.cardCount}
                       </td>
-                      <td
-                        className="py-2 px-2 text-center hover:bg-yellow-300"
-                        onClick={() => editDeckHandle(deck)}
-                      >
-                        <PiNotePencilFill size="1.4rem" />
+                      <td className="hover:bg-yellow-300">
+                        <ButtonLink className="p-2" to={"/edit/" + deck.guid}>
+                          <PiNotePencilFill size="1.4rem" />
+                        </ButtonLink>
                       </td>
-                      <td
-                        className="py-2 px-2 text-center hover:bg-yellow-300"
-                        onClick={async () => await deleteDeckHandle(deck)}
-                      >
-                        <PiTrashFill size="1.4rem" />
+                      <td className="hover:bg-yellow-300">
+                        <Button
+                          className="p-2"
+                          onClick={async () => await deleteDeckHandle(deck)}
+                        >
+                          <PiTrashFill size="1.4rem" />
+                        </Button>
                       </td>
                     </tr>
                   ))}
