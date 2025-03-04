@@ -14,7 +14,8 @@ export default function LoginPage() {
   const [userData, setUserData] = useContext(AuthContext);
 
   // Sumbitting account creation request
-  async function loginHandle() {
+  async function loginHandle(e) {
+    e.preventDefault();
     setErrors((prev) => (prev = []));
     const result = await api("post", "/login", {
       username: username,
@@ -75,7 +76,7 @@ export default function LoginPage() {
             {/* Submit */}
             <Button
               className={"bg-yellow-300 px-4 py-2 font-medium rounded-lg"}
-              onClick={() => loginHandle()}
+              onClick={(e) => loginHandle(e)}
             >
               Log in
             </Button>

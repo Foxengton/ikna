@@ -49,7 +49,8 @@ export default function RegisterPage() {
   }
 
   // Sumbitting account creation request
-  async function handleRegister() {
+  async function handleRegister(e) {
+    e.preventDefault();
     if (!checkValidity()) return;
     const result = await api("post", "/register", {
       username: username,
@@ -116,7 +117,7 @@ export default function RegisterPage() {
             {/* Submit */}
             <Button
               className={"bg-yellow-300 px-4 py-2 font-medium rounded-lg"}
-              onClick={() => handleRegister()}
+              onClick={(e) => handleRegister(e)}
             >
               Create Account
             </Button>
