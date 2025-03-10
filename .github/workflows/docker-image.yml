@@ -22,7 +22,13 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/foxengton/ikna:latest .
+        run: cd server && docker build -t ghcr.io/foxengton/ikna-backend:latest .
 
       - name: Push Docker image
-        run: docker push ghcr.io/foxengton/ikna:latest
+        run: docker push ghcr.io/foxengton/ikna-backend:latest
+
+      - name: Build Docker image
+        run: cd .. && cd client && docker build -t ghcr.io/foxengton/ikna-client:latest .
+
+      - name: Push Docker image
+        run: docker push ghcr.io/foxengton/ikna-client:latest
