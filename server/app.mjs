@@ -26,6 +26,6 @@ export const secretKey = await initSecretKey();
 await initDatabase();
 await initControllers();
 
-app.listen(config.db.port, () => {
-  console.log(`Server is running at ${config.db.host}:${config.db.port}`);
+app.listen(3000, () => {
+  console.log(`Server is listening port 3000`);
 });

@@ -1,0 +1,46 @@
+services:
+  backend:
+    image: xijiks/backend
+    build: ./server
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    image: xijiks/frontend
+    build: ./client
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      mysql:
+        condition: service_healthy
+      backend:
+        condition: service_started
+
+  mysql:
+    image: mysql:8.0.41
+    # restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ZGlja0VhdGVy
+      MYSQL_DATABASE: ikna
+      MYSQL_USER: ikna_user
+      MYSQL_PASSWORD: ZGlja0VhdGVy
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.2
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
