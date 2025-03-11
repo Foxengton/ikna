@@ -15,10 +15,9 @@ services:
   frontend:
     image: ghcr.io/foxengton/ikna-frontend:latest
     environment:
-      - VITE_SERVER_BASE_URL=http://localhost/api
+      - VITE_SERVER_BASE_URL=http://localhost:8080/api
     ports:
-      - 80:80
-      - 443:443
+      - 8080:8080
 
   mysql:
     image: mysql:8.0.41
