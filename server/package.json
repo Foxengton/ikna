@@ -15,6 +15,9 @@
     "transform": {}
   },
   "scripts": {
+    "run": "node app.mjs",
+    "dev": "node --env-file .env.development app.mjs",
+    "prod": "node --env-file .env.production app.mjs",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   }
 }

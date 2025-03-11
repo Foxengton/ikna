@@ -1,26 +1,12 @@
 import fs from "fs";
-import { config, pool } from "../app.mjs";
-import mysql from "mysql2/promise";
-
-async function createDatabase() {
-  const connection = await mysql.createConnection({
-    host: config.db.host,
-    user: config.db.user,
-    password: config.db.password,
-    multipleStatements: true,
-  });
-  console.log("Creating database...");
-  await connection.query(`
-    CREATE DATABASE ${config.db.name};
-    USE ${config.db.name};
-  `);
-  console.log("Database created");
-}
+import {
+  pool
+} from "../app.mjs";
 
 async function createTables() {
   console.log("Creating tables...");
   // Fetching schema
-  const sqlInitialQuery = fs.readFileSync(config.db.schemaLocation, {
+  const sqlInitialQuery = fs.readFileSync("./schema.sql", {
     encoding: "utf8",
   });
   // Creating database from the schema
@@ -37,12 +23,9 @@ export default async function initDatabase() {
   } catch (err) {
     switch (err.code) {
       case "ER_BAD_DB_ERROR":
-        console.log(`Database "${config.db.name}" doesn't exist!`);
-        await createDatabase();
-        await createTables();
-        break;
+        throw new Error(`Database "${process.env.DB_NAME || "ikna"}" doesn't exist!`);
       case "ER_NO_SUCH_TABLE":
-        console.log(`Tables in "${config.db.name}" database are missing!`);
+        console.log(`Tables in "${process.env.DB_NAME || "ikna"}" database are missing!`);
         await createTables();
         break;
       default:
@@ -52,7 +35,7 @@ export default async function initDatabase() {
   }
 
   // TESTING: Clearing database on launch
-  if (config.db.tableCleanup) {
+  if (process.env.TABLE_CLEANUP === "true" || false) {
     try {
       await pool.query(`
         TRUNCATE users;

@@ -2,6 +2,16 @@ services:
   backend:
     image: xijiks/backend
     build: ./server
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=ikna_user
+      - DB_PORT=3306
+      - DB_NAME=ikna
+      - DB_PASSWORD=ZGlja0VhdGVy
+      - SERVER_PORT=3000
+      - TABLE_CLEANU=false
+      - JWT_EXPIRATION_TIME=1d
+      - SECRET_KEY_SIZE=128
     depends_on:
       mysql:
         condition: service_healthy
@@ -9,14 +19,11 @@ services:
   frontend:
     image: xijiks/frontend
     build: ./client
+    environment:
+      - VITE_SERVER_BASE_URL=https://ikna.localhost/api
     ports:
       - 80:80
       - 443:443
-    depends_on:
-      mysql:
-        condition: service_healthy
-      backend:
-        condition: service_started
 
   mysql:
     image: mysql:8.0.41

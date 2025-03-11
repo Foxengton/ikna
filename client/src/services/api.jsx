@@ -1,5 +1,4 @@
 import axios from "axios";
-import config from "../config.json";
 import Cookies from "js-cookie";
 
 export default async function api(method, url, data = null) {
@@ -7,7 +6,7 @@ export default async function api(method, url, data = null) {
   const result = await axios({
     method: method,
     url: url,
-    baseURL: config.serverBaseUrl,
+    baseURL: import.meta.env.VITE_SERVER_BASE_URL || "http://127.0.0.1:3000/api",
     data: data,
     headers: {
       common: {

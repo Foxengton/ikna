@@ -36,16 +36,15 @@ Now you should be able to access the web interface by `http://localhost:5173/`.
 
 ### Client config
 
-- `serverBaseUrl` — URL of the server API. `http://127.0.0.1:3000/api` by default.
+- `VITE_SERVER_BASE_URL` — URL of the server API. `http://127.0.0.1:3000/api` by default.
 
 ### Server config
 
-- `db.host` — domain name to access database. If the database is hosted on the same machine as the server, it should stay unchanged. `localhost` by default.
-- `db.port` — port to access database. `3000` by default.
-- `db.user` — MySQL username to be used to access the app's database. `root` by default.
-- `db.password` — MySQL password for the chosen user. Empty by default.
-- `db.name` — MySQL database name. `ikna` by default.
-- `db.schemaLocation` — location of the file that contains the innitial database schema that will be applied on the first run. Changing this value is not recommended. `./schema.sql` by default.
-- `db.tableCleanup` **(testing only)** — when set `true`, the database tables will be truncated on every run. `false` by default.
-- `secretKeySize` — the number of random bytes that will be used to sign authentification tokens. Those bytes are saved as `secret.key` on the first run. `128` by default.
-- `jwtExpirationTime` - the time allowed for tokens to stay valid before expiring. `1d` by default.
+- `DB_HOST` — domain name to access database. If the database is hosted on the same machine as the server, it should stay unchanged. `localhost` by default.
+- `DB_PORT` — port to access database. `3306` by default.
+- `DB_USER` — MySQL username to be used to access the app's database. `root` by default.
+- `DB_PASSWORD` — MySQL password for the chosen user. Empty by default.
+- `DB_NAME` — MySQL database name. `ikna` by default.
+- `TABLE_CLEANUP` **(testing only)** — when set `true`, the database tables will be truncated on every run. `false` by default.
+- `SECRET_KEY_SIZE` — the number of random bytes that will be used to sign authentification tokens. Those bytes are saved as `secret.key` on the first run. `128` by default.
+- `JWT_EXPIRATION_TIME` - the time allowed for tokens to stay valid before expiring. `1d` by default.

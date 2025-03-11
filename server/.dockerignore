@@ -3,4 +3,5 @@ tests
 Dockerfile
 .dockerignore
 node_modules
-config.EXAMPLE.json
+secret.key
+.env*
