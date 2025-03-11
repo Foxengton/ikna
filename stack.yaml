@@ -1,0 +1,30 @@
+name: "ikna"
+
+services:
+  backend:
+    image: ghcr.io/foxengton/ikna-backend:latest
+  frontend:
+    image: ghcr.io/foxengton/ikna-frontend:latest
+    environment:
+      - VITE_SERVER_BASE_URL=https://ikna.localhost/api
+    ports:
+      - 80:80
+      - 443:443
+
+  mysql:
+    image: mysql:8.0.41
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.2
+    environment:
+      PMA_HOST: mysql
+
+volumes:
+  mysql_data:
