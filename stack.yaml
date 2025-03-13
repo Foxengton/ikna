@@ -12,12 +12,10 @@ services:
       - JWT_EXPIRATION_TIME=1d
       - SECRET_KEY_SIZE=128
 
-  frontend:
+  ikna:
     image: ghcr.io/foxengton/ikna-frontend:latest
     environment:
-      - VITE_SERVER_BASE_URL=http://localhost:8080/api
-    ports:
-      - 8080:8080
+      - VITE_SERVER_BASE_URL=http://ikna.jtonic.ru/api
 
   mysql:
     image: mysql:8.0.41
