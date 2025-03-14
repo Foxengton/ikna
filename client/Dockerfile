@@ -7,16 +7,12 @@ WORKDIR /app
 RUN npm install
 RUN npm run build
 
-
 FROM nginx:alpine AS prod
 
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /var/www/html/public
 COPY ./webserver/nginx /etc/nginx
 
 COPY env.sh /docker-entrypoint.d/env.sh
 RUN chmod +x /docker-entrypoint.d/env.sh
-
-EXPOSE 80
-EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]

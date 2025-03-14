@@ -10,4 +10,6 @@ FROM node:22-alpine AS prod
 COPY --from=build /app /app
 WORKDIR /app
 
+EXPOSE 3000
+
 CMD ["node", "app.mjs"]
