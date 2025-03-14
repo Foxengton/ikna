@@ -10,7 +10,7 @@ RUN npm run build
 FROM nginx:alpine AS prod
 
 COPY --from=build /app/dist /var/www/html/public
-COPY ./webserver/nginx /etc/nginx
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
 COPY env.sh /docker-entrypoint.d/env.sh
 RUN chmod +x /docker-entrypoint.d/env.sh

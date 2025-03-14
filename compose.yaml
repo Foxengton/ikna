@@ -20,9 +20,9 @@ services:
     image: xijiks/frontend
     build: ./client
     environment:
-      - VITE_SERVER_BASE_URL=http://ikna.localhost:8080/api
+      - VITE_SERVER_BASE_URL=http://localhost/api
     ports:
-      - 8080:80
+      - 80:80
 
   mysql:
     image: mysql:8.0.41
