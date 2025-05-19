@@ -1,0 +1,7 @@
+.gitignore
+tests
+Dockerfile
+.dockerignore
+node_modules
+secret.key
+.env*

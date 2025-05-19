@@ -1,6 +1,5 @@
 import mysql from "mysql2/promise";
 import express from "express";
-import fs from "fs";
 import initDatabase from "./services/initDatabase.mjs";
 import initControllers from "./services/initControllers.mjs";
 import initSecretKey from "./services/initSecretKey.mjs";
@@ -9,16 +8,12 @@ import cors from "cors";
 export const app = express();
 app.use(cors());
 
-// Fetching configs
-console.clear();
-export const config = await JSON.parse(
-  fs.readFileSync("./config.json", { encoding: "utf8" })
-);
 export const pool = mysql.createPool({
-  host: config.db.host,
-  user: config.db.user,
-  database: config.db.name,
-  password: config.db.password,
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  port: process.env.DB_PORT || 3306,
+  database: process.env.DB_NAME || "ikna",
+  password: process.env.DB_PASSWORD || "",
   multipleStatements: true,
 });
 
@@ -26,6 +21,7 @@ export const secretKey = await initSecretKey();
 await initDatabase();
 await initControllers();
 
-app.listen(config.db.port, () => {
-  console.log(`Server is running at ${config.db.host}:${config.db.port}`);
+const port = process.env.SERVER_PORT || 4000;
+app.listen(port, () => {
+  console.log(`Server is listening port ${port}`);
 });

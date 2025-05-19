@@ -1,0 +1,52 @@
+services:
+  backend:
+    image: xijiks/backend
+    build: ./server
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=ikna_user
+      - DB_PORT=3306
+      - DB_NAME=ikna
+      - DB_PASSWORD=ZGlja0VhdGVy
+      - SERVER_PORT=3000
+      - TABLE_CLEANU=false
+      - JWT_EXPIRATION_TIME=1d
+      - SECRET_KEY_SIZE=128
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    image: xijiks/frontend
+    build: ./client
+    environment:
+      - VITE_SERVER_BASE_URL=http://localhost/api
+    ports:
+      - 80:80
+
+  mysql:
+    image: mysql:8.0.41
+    # restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ZGlja0VhdGVy
+      MYSQL_DATABASE: ikna
+      MYSQL_USER: ikna_user
+      MYSQL_PASSWORD: ZGlja0VhdGVy
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.2
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

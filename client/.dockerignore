@@ -1,0 +1,7 @@
+.gitignore
+.dockerignore
+tests
+Dockerfile
+node_modules
+web_server
+src/config.EXAMPLE.json
